@@ -20,7 +20,7 @@
 
 
 
-
+\usepackage[linesnumbered,ruled]{algorithm2e}
 
 \usepackage[margin=0.5in]{geometry}
 \usepackage{amssymb}
@@ -275,6 +275,15 @@ Faculty of Mathematics and Information Science.}}
 %---------------------------------------------------------------------
 \section{Preliminaries}
 
+\subsection{Triangle inequality}
+
+The cost function c satisfies the \textbf{triangle inequality} if, for all vertices $u,v,w \in V$
+
+\begin{center}
+	$c(u,v)\leq c(u,v) + c(v,w)$
+\end{center}
+
+It means that adding intermediate steps between some vertices will never decrease the cost.
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{Approximation Ratio}
@@ -282,6 +291,45 @@ Faculty of Mathematics and Information Science.}}
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{TSP}
+
+\subsection{Definition}
+\textbf{Traveling salesman problem} in a given graph is asking for a Hamiltonian cycle with the smallest possible sum of weights.
+
+\subsection{Aproximation algorithm}
+
+To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. Sum of weights of MST gives us a lower bound on cost of optimal TSP tour. It also will be used to create a tour whose cost is no more than twice that of the minimum spanning tree's wight (having that it satisfies the triangle inequality). We assume that an input for our algorithm is a complete, undirected graph with vertex r as a root and c satisfies the triangle inequality.
+
+
+\begin{algorithm}[H]
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{complete, undirected graph $G$, cost function $c$ }
+    \Output{Hamiltonian cycle H}
+    select a vertex $r \in G.V$ to be a root vertex \\
+    
+    compute a minimum spanning tree T for G from root r using MST-PRIM(G,c,r) \\
+    
+    let H be a list of vertices, ordered according to when they are first visited in a preorder tree walk of T \\
+    
+    return the hamiltonian cycle H \\
+    
+  %  \underline{function HILL-CLIMBING-IMPROVED} $(s, n)$\;
+  %  $i = 0$ \\
+  %  $current = s$ \\
+  %  \While{$i < n$}
+  %  {
+  %  	$neighbor$ $\gets$ randomly generated state, different than $current$ \\
+    	
+    %	\If{OBJ-FUNCTION[neighbor] $\geq$ OBJ-FUNCTION[current]}
+    %	{
+	%		$current$ $\gets$ $neighbor$
+   	%	}
+   		  		
+   % }
+    \caption{Approx-TSP-Tour}
+    \label{algo:hc_improved}
+\end{algorithm}
+
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
