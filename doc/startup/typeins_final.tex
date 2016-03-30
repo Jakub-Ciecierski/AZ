@@ -403,7 +403,10 @@ To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. 
         $c$ - Cost function satisfying triangle inequality. $c: E -> N$
     }
     \Output{$H$ - Hamiltonian cycle}
-    $T = $ MBST$(G,c)$
+    
+    $T = $ MBST$(G,c)$ \\
+    
+    
     \caption{BTSP-Approx(G,c)}
     \label{alg:btsp}
 \end{algorithm}
@@ -422,10 +425,38 @@ To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. 
 %---------------------------------------------------------------------
 \subsection{Correctness}
 
+First, let us consider minimum spanning tree $T$ and bottleneck spanning tree $T_{b}$ of the same graph $G$. It can be easily shown that $T$ is also a bottleneck spanning tree since discarding the heaviest weighed edge, contributes to the smallest sum of weights in the spanning tree. However a bottleneck spanning tree is not necessarily minimum spanning tree. Although, if the heaviest edge in $T$ has weight $w$, then the bottleneck in $T_{b}$ is at most $w$.
+
+\begin{theorem} \label{thm:mbst}
+    MBST finds Minimum Bottleneck Spanning Tree
+\end{theorem}
+
+{\textbf Proof of Theorem~\ref{thm:mbst}}
+
+After each iteration, the graph is half divided around the median of weights of edges. Suppose that $B$ is the set of edges with weights smaller or equal to median and $A$ the set of remaining edges. If $B$ is a single connected component then the edges in $A$ are considered to be too heavy and thus rejected. In this simply case we can see that if $B$ remains connected without some of the heaviest edges, the algorithm will successfully remove them. However, if after partitioning, $B$ contains multiple connected components, the graph has to be contracted. The algorithm contracts each of the connected components of $B$ into a single super vertex so that the input of recursive call is a connected graph. The process is repeated until we end up with two super vertices which we can be connected by the edge with smallest weight.
+
+
+\begin{theorem} \label{thm:btsp}
+BTSP-Approx is a 3-approximation of BTSP problem.
+\end{theorem}
+
+\textbf {Proof of Theorem~\ref{thm:btsp}}\\
+
+
+
+
+Let $H^*$ denote a Hamiltonian cycle with heaviest edge weight $w$. Then there exists a spanning tree whose heaviest edge has weight $w$. Thus the heaviest edge in the bottleneck spanning tree has weight at most $w$.
+
+
+
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{Time Complexity}
 
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\section{Input/Output}
 
 \begin{thebibliography}{4}
 
