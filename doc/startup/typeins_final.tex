@@ -64,8 +64,8 @@
 %\usepackage{groupplots}
 %\usepgfplotslibrary{groupplots}
 \pgfplotsset{compat=newest}
-   
-   
+
+
 %
 % Define bar chart colors
 %
@@ -80,7 +80,7 @@
 \usepackage{graphicx}
 
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
-\noindent\keywordname\enspace\ignorespaces#1}
+    \noindent\keywordname\enspace\ignorespaces#1}
 
 
 
@@ -167,9 +167,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Adds needed style to pgfplot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \newcommand{\setPlotStyle}[0]{
-        \pgfplotsset{xticklabel style={text width=2em, align=center}}
-    }
+\newcommand{\setPlotStyle}[0]{
+    \pgfplotsset{xticklabel style={text width=2em, align=center}}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Starts groupplot with given style
@@ -226,277 +226,270 @@
         ]
     }%beginGroupPlot
     
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Sets legends for Bar plot
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Sets legends for Bar plot
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \newcommand{\setPlotLegend}[0]{
         \legend{Training $|w|<C$,  Training $|w|>C$,  Training All,  Testing}
     }
     
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%           END OF COMMANDS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-\begin{document}
-
-\mainmatter  % start of an individual contribution
-
-\title{Krotkodystansowy Komiwojazer \\ Bottleneck Traveling Salesman Problem}
-
-% a short form should be given in case it is too long for the running head
-\titlerunning{Bottleneck TSP}
-
-\author{Jakub Ciecierski \and Wojcik Lukasz \\ 
-\textit{Warsaw University of Technology, \\
-Faculty of Mathematics and Information Science.}}
-%
-
-\authorrunning{Bottleneck TSP}
-
-\toctitle{Bottleneck TSP}
-\tocauthor{Methodology}
-\maketitle
-
-
-
-
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\section{Introduction}
-
-This documentation describes an approximation algorithm solving a Bottleneck Traveling Salesman Problem. A solution given by such algorithm should not be worse more than 3 times than optimal solution.
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\section{Preliminaries}
-
-\subsection{Triangle inequality}
-
-The cost function c satisfies the \textbf{triangle inequality} if, for all vertices $u,v,w \in V$
-
-\begin{center}
-	$c(u,v)\leq c(u,v) + c(v,w)$
-\end{center}
-
-It means that adding intermediate steps between some vertices will never decrease the cost.
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsection{Approximation Ratio}
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsection{TSP}
-
-\subsection{Definition}
-\textbf{Traveling salesman problem} in a given graph is asking for a Hamiltonian cycle with the smallest possible sum of weights.
-
-\subsection{Aproximation algorithm}
-
-To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. Sum of weights of MST gives us a lower bound on cost of optimal TSP tour. It also will be used to create a tour whose cost is no more than twice that of the minimum spanning tree's wight (having that it satisfies the triangle inequality). We assume that an input for our algorithm is a complete, undirected graph with vertex r as a root and c satisfies the triangle inequality.
-
-
-\begin{algorithm}[H]
-    \SetKwInOut{Input}{Input}
-    \SetKwInOut{Output}{Output}
-    \Input{complete, undirected graph $G$, cost function $c$ }
-    \Output{Hamiltonian cycle H}
-    select a vertex $r \in G.V$ to be a root vertex \\
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %           END OF COMMANDS
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    compute a minimum spanning tree T for G from root r using MST-PRIM(G,c,r) \\
     
-    let H be a list of vertices, ordered according to when they are first visited in a preorder tree walk of T \\
     
-    return the hamiltonian cycle H \\
     
-  %  \underline{function HILL-CLIMBING-IMPROVED} $(s, n)$\;
-  %  $i = 0$ \\
-  %  $current = s$ \\
-  %  \While{$i < n$}
-  %  {
-  %  	$neighbor$ $\gets$ randomly generated state, different than $current$ \\
-    	
-    %	\If{OBJ-FUNCTION[neighbor] $\geq$ OBJ-FUNCTION[current]}
-    %	{
-	%		$current$ $\gets$ $neighbor$
-   	%	}
-   		  		
-   % }
-    \caption{Approx-TSP-Tour}
-    \label{algo:hc_improved}
-\end{algorithm}
-
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsection{Bottleneck TSP}
-
-
-\begin{algorithm}[h]
-    \SetKwInOut{Input}{Input}
-    \SetKwInOut{Output}{Output}
-    \Input{
-        $G(V,E)$ - Connected, undirected graph, where $V$ is the set of vertices and $E$ is the set of edges \\
-        $c$ - Cost function. $c: E -> N$
-    }
-    \Output{$T$ - Minimum Bottleneck Spanning Tree}
-    
-    \If{$|G.E|$ = 1}{return $G$}
-    
-    $m = computeMedianWeight(G)$ \\
-    $A = \{e : {e {\in G.E}} \land c(e) > m \}$. Set of edges with weight greater than $m$ \\
-    $B = \{e : {e{\in G.E}} \land c(e) \leq m \}$. Set of edges with weight smaller or equal to $m$ \\
-    $F =$ Forest(B) \\
-      
-    \If{$|F|=1$ and spans all vertices}{
-		\If{$B.Count() == G.E.Count()$}
-		{
-			Take one edge from B and move it to set A.\\			
-		}   	
-    	
-        $G^{'}.V = G.V$ \\
-        $G^{'}.E = B$ \\
-        return MBST$(G^{'})$
-    }
-    \Else {
-        $G^{'}$ = MBST-Contract$(F, A)$
+    \begin{document}
         
-        return $F$ $\cup$ MBST($G^{'}$)
-    }
-    
-    \caption{MBST(G, c)}
-    \label{alg:mbst}
-\end{algorithm}
-
-\textbf{Algorithm 2 complexity}
-
-\begin{itemize}
-	\item lines 1-2 $O(1)$ - obvious
-	\item line 4 $O(E)$ - selection algorithm
-	\item lines 5-6 $O(E)$ - obvious
-	\item line 7 $O(E+V)$ (O(n)) - every edge is considered twice and every node is processed once
-	\item line 8 $O(V)$ - check if size of forest is equal to 1 and if number of vertices in forest is equal to number of vertices in input graph (linear)
-	\item line 9 $O(E)$ - check if number of edges  in both sets is equal (linear)
-	\item line 10 $O(1)$ - obvious
-	\item line 12 $O(V)$ - copy V vertices from G'.V
-	\item line 13 $O(E)$ - copy E edges from B to G'.E
-	\item line 17 $O(V+E)$ - complexity of algorithm 3
-\end{itemize}
-	\textbf{Sum} - $O(V + E)$ \\
-	
-	
-	In each recursive call we have 2 times less edges than in the calling function so complexity will also be 2 times smaller. Sum of costs of all calls of this function (including initial one will be not bigger than $O(2V + 2E) == O(V+E)$
-
-
-\begin{algorithm}[h]
-    \SetKwInOut{Input}{Input}
-    \SetKwInOut{Output}{Output}
-    \Input{
-        $F$ - Forest,
-        $A$ - Set of edges
-    }
-    \Output{$G$ - Connected graph}
-  
-    $V_{F} = $ A single super vertex is created for each connected component of $F$. Each such vertex corresponds to its connected component. \\
-    $V = $ Missing Vertices in $F$. Vertices in $A$ but not in $F$ \\
-    
-    $E_{F}$ = Edges from $A$ that connect the connected components of $F$\\
-    $E$ = Edges from $A$ to missing vertices in $F$ \\
-    
-    $G.V = $ $V_{F} \cup V $ \\
-    $G.E = $ $E_{F} \cup E $
-    
-    return $G$
-
-    \caption{MBST-Contract(F, A)}
-    \label{alg:mbst_contract}
-\end{algorithm}
-
-\textbf{Algorithm 3 complexity}
-
-\begin{itemize}
-	\item lines 1-2 $O(V)$
-	\item lines 3-4 $O(E)$
-	\item line 5 $O(V)$
-	\item line 6 $O(E)$
-\end{itemize}
-
-\textbf{Sum} - $O(V + E)$
-
-\begin{algorithm}[h]
-    \SetKwInOut{Input}{Input}
-    \SetKwInOut{Output}{Output}
-    \Input{
-        $G(V,E)$ - complete, undirected graph, where $V$ is the set of vertices and $E$ is the set of edges \\
-        $r$ - root $r \in G.V$ \\
-        $c$ - Cost function satisfying triangle inequality. $c: E -> N$
-    }
-    \Output{$H$ - Hamiltonian cycle}
-    
-    $T = $ MBST$(G,c)$ \\
-    
-    
-    \caption{BTSP-Approx(G,c)}
-    \label{alg:btsp}
-\end{algorithm}
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\section{Algorithm}
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\section{Analysis}
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsection{Correctness}
-
-First, let us consider minimum spanning tree $T$ and bottleneck spanning tree $T_{b}$ of the same graph $G$. It can be easily shown that $T$ is also a bottleneck spanning tree since discarding the heaviest weighed edge, contributes to the smallest sum of weights in the spanning tree. However a bottleneck spanning tree is not necessarily minimum spanning tree. Although, if the heaviest edge in $T$ has weight $w$, then the bottleneck in $T_{b}$ is at most $w$.
-
-\begin{theorem} \label{thm:mbst}
-    MBST finds Minimum Bottleneck Spanning Tree
-\end{theorem}
-
-{\textbf Proof of Theorem~\ref{thm:mbst}}
-
-After each iteration, the graph is half divided around the median of weights of edges. Suppose that $B$ is the set of edges with weights smaller or equal to median and $A$ the set of remaining edges. If $B$ is a single connected component then the edges in $A$ are considered to be too heavy and thus rejected. In this simply case we can see that if $B$ remains connected without some of the heaviest edges, the algorithm will successfully remove them. However, if after partitioning, $B$ contains multiple connected components, the graph has to be contracted. The algorithm contracts each of the connected components of $B$ into a single super vertex so that the input of recursive call is a connected graph. The process is repeated until we end up with two super vertices which we can be connected by the edge with smallest weight.
-
-
-\begin{theorem} \label{thm:btsp}
-BTSP-Approx is a 3-approximation of BTSP problem.
-\end{theorem}
-
-\textbf {Proof of Theorem~\ref{thm:btsp}}\\
-
-
-
-
-Let $H^*$ denote a Hamiltonian cycle with heaviest edge weight $w$. Then there exists a spanning tree whose heaviest edge has weight $w$. Thus the heaviest edge in the bottleneck spanning tree has weight at most $w$.
-
-
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsection{Time Complexity}
-
+        \mainmatter  % start of an individual contribution
+        
+        \title{Krotkodystansowy Komiwojazer \\ Bottleneck Traveling Salesman Problem}
+        
+        % a short form should be given in case it is too long for the running head
+        \titlerunning{Bottleneck TSP}
+        
+        \author{Jakub Ciecierski \and Wojcik Lukasz \\ 
+            \textit{Warsaw University of Technology, \\
+                Faculty of Mathematics and Information Science.}}
+        %
+        
+        \authorrunning{Bottleneck TSP}
+        
+        \toctitle{Bottleneck TSP}
+        \tocauthor{Methodology}
+        \maketitle
+        
+        
+        
+        
+        
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \section{Introduction}
+        
+        This documentation describes an approximation algorithm solving a Bottleneck Traveling Salesman Problem. A solution given by such algorithm should not be worse more than 3 times than optimal solution.
+        
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \section{Preliminaries}
+        
+        \subsection{Triangle inequality}
+        
+        The cost function c satisfies the \textbf{triangle inequality} if, for all vertices $u,v,w \in V$
+        
+        \begin{center}
+            $c(u,v)\leq c(u,v) + c(v,w)$
+        \end{center}
+        
+        It means that adding intermediate steps between some vertices will never decrease the cost.
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \subsection{Approximation Ratio}
+        
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \subsection{TSP}
+        
+        \subsection{Definition}
+        \textbf{Traveling salesman problem} in a given graph is asking for a Hamiltonian cycle with the smallest possible sum of weights.
+        
+        \subsection{Aproximation algorithm}
+        
+        To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. Sum of weights of MST gives us a lower bound on cost of optimal TSP tour. It also will be used to create a tour whose cost is no more than twice that of the minimum spanning tree's wight (having that it satisfies the triangle inequality). We assume that an input for our algorithm is a complete, undirected graph with vertex r as a root and c satisfies the triangle inequality.
+        
+        
+        \begin{algorithm}[H]
+            \SetKwInOut{Input}{Input}
+            \SetKwInOut{Output}{Output}
+            \Input{complete, undirected graph $G$, cost function $c$ }
+            \Output{Hamiltonian cycle H}
+            select a vertex $r \in G.V$ to be a root vertex \\
+            
+            compute a minimum spanning tree T for G from root r using MST-PRIM(G,c,r) \\
+            
+            let H be a list of vertices, ordered according to when they are first visited in a preorder tree walk of T \\
+            
+            return the hamiltonian cycle H \\
+            
+            %  \underline{function HILL-CLIMBING-IMPROVED} $(s, n)$\;
+            %  $i = 0$ \\
+            %  $current = s$ \\
+            %  \While{$i < n$}
+            %  {
+            %  	$neighbor$ $\gets$ randomly generated state, different than $current$ \\
+            
+            %	\If{OBJ-FUNCTION[neighbor] $\geq$ OBJ-FUNCTION[current]}
+            %	{
+            %		$current$ $\gets$ $neighbor$
+            %	}
+            
+            % }
+            \caption{Approx-TSP-Tour}
+            \label{algo:hc_improved}
+        \end{algorithm}
+        
+        
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \subsection{Bottleneck TSP}
+        
+        
+        \begin{algorithm}[h]
+            \SetKwInOut{Input}{Input}
+            \SetKwInOut{Output}{Output}
+            \Input{
+                $G(V,E)$ - Connected, undirected graph, where $V$ is the set of vertices and $E$ is the set of edges \\
+                $c$ - Cost function. $c: E -> N$
+            }
+            \Output{$T$ - Minimum Bottleneck Spanning Tree}
+            
+            \If{$|G.E|$ = 1}{return $G$}
+            
+            $m = computeMedianWeight(G)$ \\
+            $A = \{e : {e {\in G.E}} \land c(e) > m \}$. Set of edges with weight greater than $m$ \\
+            $B = \{e : {e{\in G.E}} \land c(e) \leq m \}$. Set of edges with weight smaller or equal to $m$ \\
+            $F =$ Forest(B) \\
+            
+            \If{$|F|=1$ and spans all vertices}{
+                \If{$|B| == |G.E|$}
+                {
+                    Take one edge from B and move it to set A.\\			
+                }   	
+                
+                $G^{'}.V = G.V$ \\
+                $G^{'}.E = B$ \\
+                return MBST$(G^{'})$
+            }
+            \Else {
+                $G^{'}$ = MBST-Contract$(F, A)$
+                
+                return $F$ $\cup$ MBST($G^{'}$)
+            }
+            
+            \caption{MBST(G, c)}
+            \label{alg:mbst}
+        \end{algorithm}
+        
+        \textbf{Algorithm 2 complexity}
+        
+        \begin{itemize}
+            \item lines 1-2 $O(1)$ - obvious
+            \item line 4 $O(E)$ - selection algorithm
+            \item lines 5-6 $O(E)$ - obvious
+            \item line 7 $O(E+V)$ (O(n)) - every edge is considered twice and every node is processed once
+            \item line 8 $O(V)$ - check if size of forest is equal to 1 and if number of vertices in forest is equal to number of vertices in input graph (linear)
+            \item line 9 $O(E)$ - check if number of edges  in both sets is equal (linear)
+            \item line 10 $O(1)$ - obvious
+            \item line 12 $O(V)$ - copy V vertices from G'.V
+            \item line 13 $O(E)$ - copy E edges from B to G'.E
+            \item line 17 $O(V+E)$ - complexity of algorithm 3
+        \end{itemize}
+        \textbf{Sum} - $O(V + E)$ \\
+        
+        
+        In each recursive call we have 2 times less edges than in the calling function so complexity will also be 2 times smaller. Sum of costs of all calls of this function (including initial one will be not bigger than $O(2V + 2E) == O(V+E)$
+        
+        
+        \begin{algorithm}[h]
+            \SetKwInOut{Input}{Input}
+            \SetKwInOut{Output}{Output}
+            \Input{
+                $F$ - Forest,
+                $A$ - Set of edges
+            }
+            \Output{$G$ - Connected graph}
+            
+            $V_{F} = $ A single super vertex is created for each connected component of $F$. Each such vertex corresponds to its connected component. \\
+            $V = $ Missing Vertices in $F$. Vertices in $A$ but not in $F$ \\
+            
+            $E_{F}$ = Edges from $A$ that connect the connected components of $F$\\
+            $E$ = Edges from $A$ to missing vertices in $F$ \\
+            
+            $G.V = $ $V_{F} \cup V $ \\
+            $G.E = $ $E_{F} \cup E $
+            
+            return $G$
+            
+            \caption{MBST-Contract(F, A)}
+            \label{alg:mbst_contract}
+        \end{algorithm}
+        
+        \textbf{Algorithm 3 complexity}
+        
+        \begin{itemize}
+            \item lines 1-2 $O(V)$
+            \item lines 3-4 $O(E)$
+            \item line 5 $O(V)$
+            \item line 6 $O(E)$
+        \end{itemize}
+        
+        \textbf{Sum} - $O(V + E)$
+        
+        \begin{algorithm}[h]
+            \SetKwInOut{Input}{Input}
+            \SetKwInOut{Output}{Output}
+            \Input{
+                $G(V,E)$ - complete, undirected graph, where $V$ is the set of vertices and $E$ is the set of edges \\
+                $r$ - root $r \in G.V$ \\
+                $c$ - Cost function satisfying triangle inequality. $c: E -> N$
+            }
+            \Output{$H$ - Hamiltonian cycle}
+            $T = $ MBST$(G,c)$
+            \caption{BTSP-Approx(G,c)}
+            \label{alg:btsp}
+        \end{algorithm}
+        
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \section{Algorithm}
+        
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \section{Analysis}
+        
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \subsection{Correctness}
+        
+        First, let us consider minimum spanning tree $T$ and bottleneck spanning tree $T_{b}$ of the same graph $G$. It can be easily shown that $T$ is also a bottleneck spanning tree since discarding the heaviest weighed edge, contributes to the smallest sum of weights in the spanning tree. However a bottleneck spanning tree is not necessarily minimum spanning tree. Although, if the heaviest edge in $T$ has weight $w$, then the bottleneck in $T_{b}$ is at most $w$.
+        
+        \begin{theorem} \label{thm:mbst}
+            MBST finds Minimum Bottleneck Spanning Tree
+        \end{theorem}
+        
+        {\textbf Proof of Theorem~\ref{thm:mbst}}
+        
+        After each iteration, the graph is half divided around the median of weights of edges. Suppose that $B$ is the set of edges with weights smaller or equal to median and $A$ the set of remaining edges. If $B$ is a single connected component then the edges in $A$ are considered to be too heavy and thus rejected. In this simply case we can see that if $B$ remains connected without some of the heaviest edges, the algorithm will successfully remove them. However, if after partitioning, $B$ contains multiple connected components, the graph has to be contracted. The algorithm contracts each of the connected components of $B$ into a single super vertex so that the input of recursive call is a connected graph. The process is repeated until we end up with two super vertices which we can be connected by the edge with smallest weight.
+        
+        
+        \begin{theorem} \label{thm:btsp}
+            BTSP-Approx is a 3-approximation of BTSP problem.
+        \end{theorem}
+        
+        \textbf {Proof of Theorem~\ref{thm:btsp}}\\
+        
+        
+        Let $H^*$ denote a Hamiltonian cycle with heaviest edge weight $w$. Then there exists a spanning tree whose heaviest edge has weight $w$. Thus the heaviest edge in the bottleneck spanning tree has weight at most $w$.
+        
+        
+        %---------------------------------------------------------------------
+        %---------------------------------------------------------------------
+        \subsection{Time Complexity}
+        
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \section{Input/Output}
-
-\begin{thebibliography}{4}
-
-\bibitem{mc_rao}
-
-
-\end{thebibliography}
-
-\end{document}
+        \begin{thebibliography}{4}
+            
+            \bibitem{mc_rao}
+            
+            
+        \end{thebibliography}
+        
+    \end{document}
