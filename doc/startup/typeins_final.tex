@@ -335,6 +335,79 @@ To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. 
 %---------------------------------------------------------------------
 \subsection{Bottleneck TSP}
 
+
+\begin{algorithm}[h]
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{
+        $G(V,E)$ - Connected, undirected graph, where $V$ is the set of vertices and $E$ is the set of edges \\
+        $c$ - Cost function. $c: E -> N$
+    }
+    \Output{$T$ - Minimum Bottleneck Spanning Tree}
+    
+    \If{$|G.E|$ = 1}{return $G$}
+    
+    $m = computeMedianWeight(G)$ \\
+    $A = \{e : {e {\in G.E}} \land c(e) > m \}$. Set of edges with weight greater than $m$ \\
+    $B = \{e : {e{\in G.E}} \land c(e) \leq m \}$. Set of edges with weight smaller or equal to $m$ \\
+    $F =$ Forest(B) \\
+    
+    \If{$|F|=0$}{
+        TODO
+    }    
+    \ElseIf{$|F|=1$}{
+        $G^{'}.V = G.V$ \\
+        $G^{'}.E = B$ \\
+        return MBST$(G^{'})$
+    }
+    \Else {
+        $G^{'}$ = MBST-Contract$(F, A)$
+        
+        return $F$ $\cup$ MBST($G^{'}$)
+    }
+    
+    \caption{MBST(G, c)}
+    \label{alg:mbst}
+\end{algorithm}
+
+\begin{algorithm}[h]
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{
+        $F$ - Forest,
+        $A$ - Set of edges
+    }
+    \Output{$G$ - Connected graph}
+  
+    $V_{F} = $ A single super vertex is created for each connected component of $F$. Each such vertex corresponds to its connected component. \\
+    $V = $ Missing Vertices in $F$. Vertices in $A$ but not in $F$ \\
+    
+    $E_{F}$ = Edges from $A$ that connect the connected components of $F$\\
+    $E$ = Edges from $A$ to missing vertices in $F$ \\
+    
+    $G.V = $ $V_{F} \cup V $ \\
+    $G.E = $ $E_{F} \cup E $
+    
+    return $G$
+
+    \caption{MBST-Contract(F, A)}
+    \label{alg:mbst_contract}
+\end{algorithm}
+
+\begin{algorithm}[h]
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{
+        $G(V,E)$ - complete, undirected graph, where $V$ is the set of vertices and $E$ is the set of edges \\
+        $r$ - root $r \in G.V$ \\
+        $c$ - Cost function satisfying triangle inequality. $c: E -> N$
+    }
+    \Output{$H$ - Hamiltonian cycle}
+    $T = $ MBST$(G,c)$
+    \caption{BTSP-Approx(G,c)}
+    \label{alg:btsp}
+\end{algorithm}
+
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
