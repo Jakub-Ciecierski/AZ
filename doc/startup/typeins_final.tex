@@ -269,6 +269,7 @@ Faculty of Mathematics and Information Science.}}
 %---------------------------------------------------------------------
 \section{Introduction}
 
+This documentation describes an approximation algorithm solving a Bottleneck Traveling Salesman Problem. A solution given by such algorithm should not be worse more than 3 times than optimal solution.
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -351,11 +352,13 @@ To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. 
     $A = \{e : {e {\in G.E}} \land c(e) > m \}$. Set of edges with weight greater than $m$ \\
     $B = \{e : {e{\in G.E}} \land c(e) \leq m \}$. Set of edges with weight smaller or equal to $m$ \\
     $F =$ Forest(B) \\
-    
-    \If{$|F|=0$}{
-        TODO
-    }    
-    \ElseIf{$|F|=1$}{
+      
+    \If{$|F|=1$ and spans all vertices}{
+		\If{$B.Count() == G.E.Count()$}
+		{
+			Take one edge from B and move it to set A.\\			
+		}   	
+    	
         $G^{'}.V = G.V$ \\
         $G^{'}.E = B$ \\
         return MBST$(G^{'})$
@@ -369,6 +372,26 @@ To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. 
     \caption{MBST(G, c)}
     \label{alg:mbst}
 \end{algorithm}
+
+\textbf{Algorithm 2 complexity}
+
+\begin{itemize}
+	\item lines 1-2 $O(1)$ - obvious
+	\item line 4 $O(E)$ - selection algorithm
+	\item lines 5-6 $O(E)$ - obvious
+	\item line 7 $O(E+V)$ (O(n)) - every edge is considered twice and every node is processed once
+	\item line 8 $O(V)$ - check if size of forest is equal to 1 and if number of vertices in forest is equal to number of vertices in input graph (linear)
+	\item line 9 $O(E)$ - check if number of edges  in both sets is equal (linear)
+	\item line 10 $O(1)$ - obvious
+	\item line 12 $O(V)$ - copy V vertices from G'.V
+	\item line 13 $O(E)$ - copy E edges from B to G'.E
+	\item line 17 $O(V+E)$ - complexity of algorithm 3
+\end{itemize}
+	\textbf{Sum} - $O(V + E)$ \\
+	
+	
+	In each recursive call we have 2 times less edges than in the calling function so complexity will also be 2 times smaller. Sum of costs of all calls of this function (including initial one will be not bigger than $O(2V + 2E) == O(V+E)$
+
 
 \begin{algorithm}[h]
     \SetKwInOut{Input}{Input}
@@ -393,6 +416,17 @@ To find TSP cycle we have to find a \textbf{minimum spanning tree (MST)} first. 
     \caption{MBST-Contract(F, A)}
     \label{alg:mbst_contract}
 \end{algorithm}
+
+\textbf{Algorithm 3 complexity}
+
+\begin{itemize}
+	\item lines 1-2 $O(V)$
+	\item lines 3-4 $O(E)$
+	\item line 5 $O(V)$
+	\item line 6 $O(E)$
+\end{itemize}
+
+\textbf{Sum} - $O(V + E)$
 
 \begin{algorithm}[h]
     \SetKwInOut{Input}{Input}
