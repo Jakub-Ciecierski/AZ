@@ -353,13 +353,14 @@ The contracting process is presented in algorithm~\ref{alg:mbst_contract}
     $m = computeMedianWeight(G)$ \\
     $A = \{e : {e {\in G.E}} \land c(e) > m \}$. Set of edges with weight greater than $m$ \\
     $B = \{e : {e{\in G.E}} \land c(e) \leq m \}$. Set of edges with weight smaller or equal to $m$ \\
-    $F =$ Forest(B) \\
-    
-    \If{$|F|=1$ and spans all vertices}{
-        \If{$|B| == |G.E|$}
+	\If{$|B| == |G.E|$}
         {
             Take one edge from B and move it to set A.\\			
-        }   	
+        }     
+    
+    $F =$ Forest(B) \\
+    
+    \If{$|F|=1$ and spans all vertices}{  	
         
         $G^{'}.V = G.V$ \\
         $G^{'}.E = B$ \\
@@ -469,13 +470,13 @@ Let $H^*$ denote a Hamiltonian cycle with heaviest edge weight $w$. Then there e
 runs in $O(V+E)$ time. Proof:
 
 \begin{itemize}
-  \item lines 1-2 $O(1)$ - obvious
+  \item lines 1-2 $O(1)$ 
   \item line 4 $O(E)$ - median selection algorithm \cite{cormen_9}
-  \item lines 5-6 $O(E)$ - obvious
-  \item line 7 $O(E+V)$ (O(n)) - every edge is considered twice and every node is processed once
-  \item line 8 $O(V)$ - check if size of forest is equal to 1 and if number of vertices in forest is equal to number of vertices in input graph (linear)
-  \item line 9 $O(E)$ - check if number of edges  in both sets is equal (linear)
-  \item line 10 $O(1)$ - obvious
+  \item lines 5-6 $O(E)$ - linear search of edges
+  \item line 7 $O(E)$ - check if number of edges  in both sets is equal (linear)
+  \item line 8 $O(1)$
+  \item line 10 $O(E+V)$ (O(n)) - every edge is considered twice and every node is processed once
+  \item line 11 $O(V)$ - check if size of forest is equal to 1 and if number of vertices in forest is equal to number of vertices in input graph (linear)
   \item line 12 $O(V)$ - copy V vertices from G'.V
   \item line 13 $O(E)$ - copy E edges from B to G'.E
   \item line 17 $O(V+E)$ - complexity of algorithm~\ref{alg:mbst_contract} MBST-Contract
@@ -488,10 +489,12 @@ In each recursive call we have 2 times less edges than in the calling function s
 runs in $O(V+E)$ time. Proof:
 
 \begin{itemize}
-    \item lines 1-2 $O(V)$
-    \item lines 3-4 $O(E)$
-    \item line 5 $O(V)$
-    \item line 6 $O(E)$
+    \item line 1 $O(V)$ - linear search of connected components in F
+    \item line 2 $O(V)$ - linear search of vertices not in F
+    \item line 3 $O(E)$ - linear search of edges connecting vertices in F
+    \item line 4 $O(E)$ - linear search of edges connected to vertices not in F
+    \item line 5 $O(V)$ - linear copy of vertices
+    \item line 6 $O(E)$ - linear copy of edges
 \end{itemize}
 
 \textbf{Sum} - $O(V + E)$
@@ -523,4 +526,4 @@ The output cycle, will also be a list of vertices with their $(x,y)$ coordinates
     \bibitem{cormen_9} Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein. Introduction to Algorithms, Second Edition. MIT Press and McGraw-Hill, 2001. ISBN 0-262-03293-7. Chapter 9: Medians and Order Statistics, pp. 183–196. Section 14.1: Dynamic order statistics, pp. 302–308.
 \end{thebibliography}
         
-    \end{document}
+\end{document}
