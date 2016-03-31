@@ -268,7 +268,9 @@
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \section{Introduction}
-In standard Traveling Salesman Problem (TSP), we are interesting in finding the Hamiltonian cycle with smallest sum of weights. The Bottleneck Traveling Salesman Problem (BTSP) focuses only on minimizing the cost of the heaviest weighted edge, called a bottleneck. This paper introduces the reader to the 3-approximation algorithm for BTSP for complete undirected graphs with cost function satisfying triangle inequality. The algorithm runs in linear time. Authors provide the pseudo code for the algorithm together with proof of approximation ratio property and time complexity analysis.
+In standard Traveling Salesman Problem (TSP), we are interesting in finding the Hamiltonian cycle with smallest sum of weights. The Bottleneck Traveling Salesman Problem (BTSP) focuses only on minimizing the cost of the heaviest weighted edge, called a bottleneck. Let $b$ denote a function that outputs the bottleneck value for given graph.
+
+This paper introduces the reader to the 3-approximation algorithm for BTSP for complete undirected graphs with cost function satisfying triangle inequality. The algorithm runs in linear time. Authors provide the pseudo code for the algorithm together with proof of approximation ratio property and time complexity analysis.
 
 The paper starts with preliminary definitions important to problem description. Further, approximation algorithm for classical TSP problem is presented for reference point of view. Then, the BTSP algorithm is presented and analyzed. The paper ends with input and output format for the problem implementation.
 
@@ -458,11 +460,30 @@ TODO
 
 \textbf {Proof of Theorem~\ref{thm:btsp}}\\
         
+We receive MBST $T$ by removing heaviest of edges. Also, $T$ is essentially obtained by removing a single heaviest edge from a cycle. Thus MBST provides a lower bound solution for optimal Hamiltonian cycle $H^*$ in the BTSP problem.
+\begin{center}
+    $b(T) \leq b(H^*)$
+\end{center}
 
-        
-Let $H^*$ denote a Hamiltonian cycle with heaviest edge weight $w$. Then there exists a spanning tree whose heaviest edge has weight $w$. Thus the heaviest edge in the bottleneck spanning tree has weight at most $w$.
-        
-        
+In our BTSP-Approx algorithm we obtained a Hamiltonian cycle $H$ by traversing the graph by skipping at most 2 vertices in the full walk of $T$. Considering that the cost function $c$ satisfies triangle inequality then we get:
+
+\begin{center}
+    $b(H) \leq 3b(T)$
+\end{center}
+
+Combining the two equations we finally get:
+
+\begin{center}
+    $b(H) \leq 3b(H^*)$
+\end{center}
+Which  ends our proof.
+The figure~\ref{fig:3approx_proof} shows the idea of skipping. By triangle inequality we get $c(B,C) \leq 3 * 5 = 15$
+\begin{figure}[H]
+    \includegraphics[width=0.30\textwidth]{res/3approx_proof.png}
+    \caption{Figure presents the idea of proofing the 3-approximation property of BTSP-Approx.}
+    \label{fig:3approx_proof}
+\end{figure}
+
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{Time Complexity}
