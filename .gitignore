@@ -18,6 +18,7 @@ logs/
 *.synctex.gz
 *.log
 *.out
+*.ps
 
 build
 bin
