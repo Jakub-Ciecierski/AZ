@@ -419,10 +419,8 @@ Finally, the pseudo code for 3-approximation BTSP is shown in algorithm~\ref{alg
     
     \While{sequence does not contain all vertices}
     {
-		\For{each children of current node}
-		{
-			\If{child was not visited}
-			{
+		Enter leftmost child\\
+		
 				currentNode = child\\
 				currentDistance +=1\\
 				\If{currentDistance == 3}
@@ -431,9 +429,9 @@ Finally, the pseudo code for 3-approximation BTSP is shown in algorithm~\ref{alg
 					add current node to H\\
 					currentDistance = 0 \\
 				}
-			}
-		}
-		\If{all children were visited or there is no child}
+
+		
+		\If{there is no child}
 		{
 			\If{currentNode was not visited}
 			{
@@ -443,7 +441,8 @@ Finally, the pseudo code for 3-approximation BTSP is shown in algorithm~\ref{alg
 			}
 			\If {currentNode != R}	
 			{
-				currentNode = currentNode.Parent\\
+				currentNode = 									currentNode.Parent\\
+			currentNode.DeleteLeftmostChild \\
 				currentDist++\\
 			}
 		}		
@@ -546,7 +545,7 @@ runs in $O(V+E)$ time. Proof:
 
 \subsubsection{Algorithm~\ref{alg:btsp} BTSP}
 runs in $O(V+E)$ time. Proof:
-TODO
+While loop in this algorithm is executed at most 3*V times so $O(V)$.
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
