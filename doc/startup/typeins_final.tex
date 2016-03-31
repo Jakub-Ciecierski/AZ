@@ -417,17 +417,11 @@ Finally, the pseudo code for 3-approximation BTSP is shown in algorithm~\ref{alg
     \Output{$H$ - Hamiltonian cycle}
     $T = $ MBST$(G,c)$ \\
     
-    $H = $ Hamiltonian cycle obtained by listing vertices in T such that the distance (in T) between to adjacent vertices (in the sequence) is not greater than 3. \\
-    
     \While{sequence does not contain all vertices}
     {
-		\For{number of children of current node}
+		\For{each children of current node}
 		{
-			\If{child was visited}
-			{
-				do nothing
-			}
-			\Else
+			\If{child was not visited}
 			{
 				currentNode = child\\
 				currentDistance +=1\\
@@ -447,10 +441,10 @@ Finally, the pseudo code for 3-approximation BTSP is shown in algorithm~\ref{alg
 				add currentNode to H\\
 				currentDistance = 0;
 			}
-			if (currentNode != R)		
+			\If {currentNode != R}	
 			{
-				currentNode = currentNode.Parent;
-				currentDist++;
+				currentNode = currentNode.Parent\\
+				currentDist++\\
 			}
 		}		
 		
