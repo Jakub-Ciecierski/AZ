@@ -503,6 +503,17 @@ TODO
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \section{Input/Output}
+The input graph must be complete, undirected and the cost function of weights must satisfy triangle inequality. We propose the input graph to consist of vertices with given coordinates in two dimensional euclidean space. Thus each vertex will represent a node, or city and its $(x,y)$ coordinates will represent its position in the map. The cost function will be simply the euclidean distance between two vertices, which satisfies the triangle inequality, as well as the completeness of the graph. Each vertex will given an id number, where the first vertex is the root or the starting point.
+
+The output cycle, will also be a list of vertices with their $(x,y)$ coordinates, although in this case the position in the sequence matters. The vertices will be listed in top down fashion where each of the adjacent vertices are considered to be connected. The first (root) and the last are also connected. The sample files of the explained format are presented in figure~\ref{fig:io}.
+
+\begin{figure}[H]
+    \includegraphics[width=0.4\textwidth]{res/tsp_input.png}
+    \includegraphics[width=0.4\textwidth]{res/tsp_out.png}
+    
+    \caption{Example of input (left) and output (right) files}
+    \label{fig:io}
+\end{figure}
 
 
 \begin{thebibliography}{4}
