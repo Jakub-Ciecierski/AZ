@@ -1,0 +1,14 @@
+- co robi procedura Forest? W algorytmie 2 i 3 Grafy indukowane przez B
+nie muszą być lasami, mogą mieć cykle
+- chyba odpowiedź na poprzednie pytanie odpowiada teżna te: w linii 14 i
+18 powinniśmy zwracać drzewo a czy F jest lasem?
+- przed albo po pseudokodzie BTSP-Approx jest potrzebny jakiś opis o co
+chodzi i i co chodzi z tym przeskakiwaniem  co najwyżej 2 wierzchołków
+- poprawa poprzedzniego punktu łączy sią z tą uwagą: teraz jest potrzebny
+dokładniejszy dowód tego że ratio jest 3 bo nie wiadomo dlaczego tak jest
+- w MBST-Contract A jest zbiorem krawędzi czasami a w linii 2 chyba jest
+zbiorem wierzchołków?
+- BTSP-Approx linia 17 co to jest ten R?
+- w przykładzie przed Fig 1 chodzi o c(B;C)?
+- w analizie złożoności V i E to rozumiem są zbiory a potrzebujemy
+liczności tych zbiorów
