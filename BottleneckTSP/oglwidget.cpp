@@ -72,7 +72,7 @@ void OglWidget::draw()
     glColor4f(mapColor[0], mapColor[1], mapColor[2], mapColor[3]);
     for(int i=0;i<graph.nodeVector->size();i++)
     {
-        glVertex2f((graph.nodeVector->at(i).getY()/xRatio),
+        glVertex2f((graph.nodeVector->at(i).getY()/xRatio * -1),
                    graph.nodeVector->at(i).getX()/yRatio + 0.5);
     }
     glEnd();
