@@ -15,9 +15,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    oglwidget.cpp
+    oglwidget.cpp \
+    node.cpp \
+    graph.cpp
 
 HEADERS  += mainwindow.h \
-    oglwidget.h
+    oglwidget.h \
+    node.h \
+    graph.h
 
 FORMS    += mainwindow.ui

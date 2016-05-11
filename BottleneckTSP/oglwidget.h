@@ -1,6 +1,7 @@
 #ifndef OGLWIDGET_H
 #define OGLWIDGET_H
 #include <QGLWidget>
+#include "graph.h"
 
 class OglWidget : public QGLWidget
 {
@@ -8,6 +9,8 @@ class OglWidget : public QGLWidget
 public:
      explicit OglWidget(QWidget *parent = 0);
     ~OglWidget();
+    Graph graph;
+
 protected:
 
     void initializeGL();
@@ -16,6 +19,8 @@ protected:
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
+    float xRatio = 1.0f;
+    float yRatio = 1.0f;
 
 private:
 
