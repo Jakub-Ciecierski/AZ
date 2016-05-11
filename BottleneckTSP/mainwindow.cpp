@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QTextStream>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -8,11 +9,18 @@ MainWindow::MainWindow(QWidget *parent) :
     fileDialog = new QFileDialog(this);
     setupLayout();
     setupMenuBar();
+
+    openUSAMap();
 }
 
 MainWindow::~MainWindow()
 {
+    delete fileDialog;
+}
 
+void MainWindow::openUSAMap(){
+    QString path = "../resources/usa115475.tsp";
+    openGraphFile(path);
 }
 
 void MainWindow::setupLayout()
@@ -42,6 +50,11 @@ void MainWindow::openFileDialog()
     setlocale(LC_ALL, "C");
     fileDialog->show();
     QString path = fileDialog->getOpenFileName();
+
+    openGraphFile(path);
+}
+
+void MainWindow::openGraphFile(QString path){
     QFile inputFile(path);
     if (inputFile.open(QIODevice::ReadOnly))
     {
@@ -82,6 +95,7 @@ void MainWindow::openFileDialog()
        }
        oglWidget->graph = Graph(nodeVector,minX,maxX,minY,maxY);
        inputFile.close();
+    }else{
+        std::cout << "No such file: " << path.toStdString() << std::endl;
     }
 }
-

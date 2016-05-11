@@ -33,3 +33,15 @@ Makefile*
 
 build-BottleneckTSP-Desktop_Qt_5_6_0_GCC_64bit-Debug
 *swp
+
+doc/startup/btsp_ciecierski_wojcik.pdf
+doc/startup/llncsdoc.pdf
+doc/startup/texput.log
+doc/startup/typeins_final.aux
+doc/startup/typeins_final.log
+doc/startup/typeins_final.pdf
+doc/startup/typeins_final.synctex.gz
+doc/startup/typeinst.aux
+doc/startup/typeinst.log
+doc/startup/typeinst.pdf
+doc/startup/typeinst.synctex.gz

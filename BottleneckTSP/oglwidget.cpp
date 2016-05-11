@@ -1,6 +1,7 @@
 #include "oglwidget.h"
 
-OglWidget::OglWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+OglWidget::OglWidget(QWidget *parent):
+    QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
     timerId = startTimer(17);
     this->setFocusPolicy(Qt::ClickFocus);
@@ -32,12 +33,15 @@ void OglWidget::initializeGL()
 void OglWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+
     draw();
 }
 
 void OglWidget::resizeGL(int width, int height)
 {
     glViewport(0, 0, width, height);
+
     screenWidth = width;
     screenHeight = height;
     if(width>height){
@@ -63,9 +67,13 @@ void OglWidget::draw()
     glBlendEquation(GL_MAX);
     glLineWidth(1);
     glBegin(GL_POINTS);
+
+    float mapColor[4] = {0.0f, 0.7f, 0.0f, 1.0f};
+    glColor4f(mapColor[0], mapColor[1], mapColor[2], mapColor[3]);
     for(int i=0;i<graph.nodeVector->size();i++)
     {
-        glVertex2f(graph.nodeVector->at(i).getY()/xRatio,graph.nodeVector->at(i).getX()/yRatio);
+        glVertex2f((graph.nodeVector->at(i).getY()/xRatio),
+                   graph.nodeVector->at(i).getX()/yRatio + 0.5);
     }
     glEnd();
 }
