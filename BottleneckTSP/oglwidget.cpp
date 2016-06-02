@@ -1,5 +1,10 @@
 #include "oglwidget.h"
+#include <glm/glm.hpp>
+#include <glm/vec4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+using namespace glm;
 OglWidget::OglWidget(QWidget *parent):
     QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
@@ -70,10 +75,48 @@ void OglWidget::draw()
 
     float mapColor[4] = {0.0f, 0.7f, 0.0f, 1.0f};
     glColor4f(mapColor[0], mapColor[1], mapColor[2], mapColor[3]);
+    mat4 transMat;
+    transMat = glm::scale(transMat,vec3(scale));
+    transMat = glm::translate(transMat,vec3(xTranslation,yTranslation,0.0));
+    //vec3 scalingFactor = glm::vec3(scale);
+
     for(int i=0;i<graph.nodeVector->size();i++)
     {
-        glVertex2f((graph.nodeVector->at(i).getY()/xRatio * -1),
-                   graph.nodeVector->at(i).getX()/yRatio + 0.5);
+
+        vec4 tmpVec = vec4(vec2(graph.nodeVector->at(i).getY(),graph.nodeVector->at(i).getX()),1.0,1.0);
+                tmpVec = transMat  * tmpVec;
+        glVertex2f((tmpVec.x/xRatio * -1),
+                   tmpVec.y/yRatio + 0.5);
     }
     glEnd();
+}
+
+
+void OglWidget::keyPressEvent(QKeyEvent *event)
+{
+    keysPressed += event->key();
+
+    if(keysPressed.contains(Qt::Key_W)){
+            yTranslation -= 0.05f;
+    }
+    if(keysPressed.contains(Qt::Key_S)){
+            yTranslation += 0.05f;
+    }
+    if(keysPressed.contains(Qt::Key_A)){
+        xTranslation+=0.05f;
+    }
+    if(keysPressed.contains(Qt::Key_D)){
+        xTranslation-=0.05f;
+    }
+    if(keysPressed.contains(Qt::Key_Q)){
+        scale+=0.1f;
+    }
+    if(keysPressed.contains(Qt::Key_E)){
+        scale-=0.1f;
+    }
+}
+
+void OglWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    keysPressed-= event->key();
 }

@@ -2,6 +2,8 @@
 #define OGLWIDGET_H
 #include <QGLWidget>
 #include "graph.h"
+#include <QSet>
+#include <QKeyEvent>
 
 class OglWidget : public QGLWidget
 {
@@ -22,8 +24,14 @@ protected:
     float xRatio = 1.0f;
     float yRatio = 1.0f;
 
-private:
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
+private:
+    QSet<int> keysPressed;
+    float scale = 1.0f;
+    float xTranslation = 0.0f;
+    float yTranslation = 0.0f;
     int screenWidth;
     int screenHeight;
     int timerId;
