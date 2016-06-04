@@ -83,7 +83,7 @@ void OglWidget::draw()
     for(int i=0;i<graph.nodeVector->size();i++)
     {
 
-        vec4 tmpVec = vec4(vec2(graph.nodeVector->at(i).getY(),graph.nodeVector->at(i).getX()),1.0,1.0);
+        vec4 tmpVec = vec4(vec2(graph.nodeVector->at(i)->getY(),graph.nodeVector->at(i)->getX()),1.0,1.0);
                 tmpVec = transMat  * tmpVec;
         glVertex2f((tmpVec.x/xRatio * -1),
                    tmpVec.y/yRatio + 0.5);

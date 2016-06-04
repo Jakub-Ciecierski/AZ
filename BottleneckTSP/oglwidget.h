@@ -1,7 +1,7 @@
 #ifndef OGLWIDGET_H
 #define OGLWIDGET_H
 #include <QGLWidget>
-#include "graph.h"
+#include "Structures/graph.h"
 #include <QSet>
 #include <QKeyEvent>
 

@@ -58,7 +58,7 @@ void MainWindow::openGraphFile(QString path){
     QFile inputFile(path);
     if (inputFile.open(QIODevice::ReadOnly))
     {
-       vector<Node> *nodeVector = new vector<Node>();
+       vector<Node*> *nodeVector = new vector<Node*>();
        QTextStream in(&inputFile);
        int vectorSize = 0;
        bool readDim = false;
@@ -71,7 +71,8 @@ void MainWindow::openGraphFile(QString path){
           {
               readDim = true;
               vectorSize = stoi(x.at(1));
-              nodeVector->resize(vectorSize);
+              //TMP
+              //nodeVector->resize(vectorSize);
               in.readLine();
               in.readLine();
           }
@@ -81,9 +82,14 @@ void MainWindow::openGraphFile(QString path){
        float maxX = 0;
        float maxY = 0;
 
+       int counter =0;
+       int leap = 10;
        for(int i=0;i<vectorSize;i++)
        {
            QString line = in.readLine();
+           counter++;
+           if(counter == leap){
+           counter =0;
            std::vector<std::string> x = split(line.toStdString(), ' ');
            float xCord = (float)stof(x.at(1));
            if(xCord<minX) minX = xCord;
@@ -91,7 +97,9 @@ void MainWindow::openGraphFile(QString path){
            float yCord = (float)stof(x.at(2));
            if(yCord<minY) minY = yCord;
            if(yCord>maxY) maxY = yCord;
-           nodeVector->at(i) = Node(xCord,yCord);
+           //TMP
+           nodeVector->push_back(new Node(xCord,yCord));
+           }
        }
        oglWidget->graph = Graph(nodeVector,minX,maxX,minY,maxY);
        inputFile.close();

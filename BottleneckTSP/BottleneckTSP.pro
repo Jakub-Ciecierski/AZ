@@ -18,12 +18,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     oglwidget.cpp \
-    node.cpp \
-    graph.cpp
+    bottlenecktsp.cpp \
+    Structures/graph.cpp \
+    Structures/node.cpp \
+    Structures/edge.cpp \
+    Structures/forest.cpp
 
 HEADERS  += mainwindow.h \
     oglwidget.h \
-    node.h \
-    graph.h
+    bottlenecktsp.h \
+    Structures/graph.h \
+    Structures/node.h \
+    Structures/edge.h \
+    Structures/forest.h
 
 FORMS    += mainwindow.ui
