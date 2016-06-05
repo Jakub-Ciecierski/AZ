@@ -13,12 +13,43 @@ Graph* BottleneckTSP::BTSPApprox(Graph *graph)
 
 Graph* BottleneckTSP::MBST(Graph* graph)
 {
+    if(graph->edgesVector->size() == 1)
+    {
+        return graph;
+    }
 
+    float median = computeMedianWeight(graph);
+    vector<Edge*> *vectorA = biggerThanMedian(graph->edgesVector,median);
+    vector<Edge*> *vectorB = smallerThanMedian(graph->edgesVector,median);
+
+    if(vectorB->size() == graph->edgesVector->size())
+    {
+        vectorA->push_back(vectorB->at(vectorB->size()-1));
+        vectorB->pop_back();
+    }
+
+    Forest* forest = createForest(vectorB);
+    //check
+    if(forest->size == 1)
+    {
+        Graph* graphPrime = new Graph(graph->nodeVector,vectorB);
+        return MBST(graphPrime);
+    }
+    else{
+        Graph* graphPrime = MBSTContract(forest,vectorA);
+
+        //return sum of forest and MBST(graphPrime)
+    }
 }
 
 Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges)
 {
 
+}
+
+Forest* BottleneckTSP::createForest(vector<Edge *> *edgeVector)
+{
+    return new Forest(edgeVector);
 }
 
 
@@ -80,5 +111,17 @@ float BottleneckTSP::findMedian(float *v, int n, int k)
         } else {
             return findMedian(v+store+1, n-store-1, k-store-1);
         }
+
+}
+
+vector<Edge*>* BottleneckTSP::biggerThanMedian(vector<Edge *> *edgeVector,
+                                               float median)
+{
+
+}
+
+vector<Edge*>* BottleneckTSP::smallerThanMedian(vector<Edge *> *edgeVector,
+                                               float median)
+{
 
 }
