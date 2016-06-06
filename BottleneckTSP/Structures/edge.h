@@ -7,6 +7,9 @@ class Edge
 public:
     Edge(Node* firstNode, Node* secondNode);
     Node* nodes[2];
+
+    /// pointer to nodes before MBST-Contract (if have been done)
+
     float weight;
 };
 

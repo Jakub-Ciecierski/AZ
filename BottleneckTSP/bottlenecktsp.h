@@ -14,7 +14,8 @@ private:
 
     Graph* MBST(Graph*);
 
-    Graph* MBSTContract(Forest* forest, vector<Edge*> *edges);
+    Graph* MBSTContract(Forest* forest, vector<Edge*> *edges,
+                        vector<Nodes*> *allNodes);
 
     Forest* createForest(vector<Edge*> *edgeVector);
 

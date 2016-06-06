@@ -36,17 +36,46 @@ Graph* BottleneckTSP::MBST(Graph* graph)
         return MBST(graphPrime);
     }
     else{
-        Graph* graphPrime = MBSTContract(forest,vectorA);
+        Graph* graphPrime = MBSTContract(forest,vectorA,graph->nodeVector);
 
         //return sum of forest and MBST(graphPrime)
     }
 }
 
-Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges)
+Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector<Edge*> allNodes)
 {
+    vector<Node*> *nodeVector;
+    vector<Edge*> *edgeVector;
+    //first add nodes representing component of F
+    for(int i=0;i<forest->size;i++)
+    {
+        Node* node = new Node(forest->componentNodes.at(i),forest->componentEdges.at(i));
+        nodeVector->push_back(node);
+    }
 
+    for(int i=0;i<allNodes.size();i++)
+    {
+     bool isNotInclued = true;
+
+     for(int j=0;j<forest->size;j++)
+     {
+         for(int k=0;k<forest->componentNodes.at(j).size();k++)
+         {
+            if(forest->componentNodes.at(j).at(k) == allNodes.at(i))
+            {
+                isNotInclued = false;
+                break;
+            }
+         }
+         if(!isNotInclued)break;
+     }
+
+     if(isNotInclued)
+     {
+        nodeVector->push_back(allNodes.at(i));
+     }
+    }
 }
-
 Forest* BottleneckTSP::createForest(vector<Edge *> *edgeVector)
 {
     return new Forest(edgeVector);

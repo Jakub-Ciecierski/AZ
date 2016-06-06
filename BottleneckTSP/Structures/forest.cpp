@@ -79,4 +79,6 @@ Forest::Forest(vector<Edge *> *edgeVector)
             componentNodes.push_back(newComponentNodes);
         }
     }
+
+    size = componentEdges.size();
 }

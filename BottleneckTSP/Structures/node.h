@@ -2,13 +2,22 @@
 #define NODE_H
 #include <vector>
 
+using namespace std;
+class Edge;
 class Node
 {
 public:
     Node();
     Node(float x, float y);
+    Node(vector<Node*> reprNodes,vector<Edge*> reprEdges);
 
-    std::vector<Node*> nodeVector;
+    vector<Node*> nodeVector;
+
+    /// vectors storing pointers to nodes and edges
+    /// represented by this node after MTSB-Contract. Should be null if its normal node
+
+    vector<Node*> reprNodes;
+    vector<Edge*> reprEdges;
 
     float getX();
     void setX(float x);
