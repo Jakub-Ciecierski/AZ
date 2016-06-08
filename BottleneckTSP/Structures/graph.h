@@ -13,6 +13,8 @@ public:
     Graph(vector<Node*> *nodeVector,float minX, float maxX, float minY, float maxY);
     Graph(vector<Node*> *nodeVector,vector<Edge*> *edgesVector);
 
+    float computeWeight(Node* firstNode, Node* secondNode);
+
     vector<Node*> *nodeVector;
     vector<Edge*> *edgesVector;
     bool isInit = false;

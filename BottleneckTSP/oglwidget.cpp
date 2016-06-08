@@ -67,7 +67,7 @@ void OglWidget::timerEvent(QTimerEvent *event)
 
 void OglWidget::draw()
 {
-    if(!graph.isInit) return;
+    if(!graph->isInit) return;
     glEnable(GL_BLEND);
     glBlendEquation(GL_MAX);
     glLineWidth(1);
@@ -80,10 +80,10 @@ void OglWidget::draw()
     transMat = glm::translate(transMat,vec3(xTranslation,yTranslation,0.0));
     //vec3 scalingFactor = glm::vec3(scale);
 
-    for(int i=0;i<graph.nodeVector->size();i++)
+    for(int i=0;i<graph->nodeVector->size();i++)
     {
 
-        vec4 tmpVec = vec4(vec2(graph.nodeVector->at(i)->getY(),graph.nodeVector->at(i)->getX()),1.0,1.0);
+        vec4 tmpVec = vec4(vec2(graph->nodeVector->at(i)->getY(),graph->nodeVector->at(i)->getX()),1.0,1.0);
                 tmpVec = transMat  * tmpVec;
         glVertex2f((tmpVec.x/xRatio * -1),
                    tmpVec.y/yRatio + 0.5);

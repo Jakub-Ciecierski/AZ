@@ -15,20 +15,24 @@ private:
     Graph* MBST(Graph*);
 
     Graph* MBSTContract(Forest* forest, vector<Edge*> *edges,
-                        vector<Nodes*> *allNodes);
+                        vector<Node*> *allNodes);
 
     Forest* createForest(vector<Edge*> *edgeVector);
 
     float computeMedianWeight(Graph* graph);
 
     float findMedian(float *v, int n, int k);
+    float findMedian(float *v, int size);
 
     //////HELPER FUNCTIONS/////
 
     vector<Edge*>* biggerThanMedian(vector<Edge*> *edgeVector,
                                     float median);
-    vector<Edge*>* smallerThanMedian(vector<Edge*> *edgeVector,
+    vector<Edge*>* smallerOrEqualThanMedian(vector<Edge*> *edgeVector,
                                      float median);
+
+    void divideEdgesByMedian(vector<Edge*> *edgeVector,
+                             float median,vector<Edge*> *vectorA,vector<Edge*> *vectorB);
 
 };
 

@@ -19,7 +19,8 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::openUSAMap(){
-    QString path = "../resources/usa115475.tsp";
+    //QString path = "../resources/usa115475.tsp";
+    QString path = "../resources/mein.tsp";
     openGraphFile(path);
 }
 
@@ -83,7 +84,7 @@ void MainWindow::openGraphFile(QString path){
        float maxY = 0;
 
        int counter =0;
-       int leap = 10;
+       int leap = 1;
        for(int i=0;i<vectorSize;i++)
        {
            QString line = in.readLine();
@@ -101,7 +102,10 @@ void MainWindow::openGraphFile(QString path){
            nodeVector->push_back(new Node(xCord,yCord));
            }
        }
-       oglWidget->graph = Graph(nodeVector,minX,maxX,minY,maxY);
+       oglWidget->graph = new Graph(nodeVector,minX,maxX,minY,maxY);
+
+       Graph* graph = btsp.BTSPApprox(oglWidget->graph);
+
        inputFile.close();
     }else{
         std::cout << "No such file: " << path.toStdString() << std::endl;

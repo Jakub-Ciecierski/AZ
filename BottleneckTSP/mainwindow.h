@@ -11,6 +11,7 @@
 #include <sstream>
 #include <vector>
 #include <locale.h>
+#include "bottlenecktsp.h"
 /*namespace Ui {
 class MainWindow;
 }*/
@@ -55,6 +56,8 @@ private:
     void setupMenuBar();
 
     void openGraphFile(QString path);
+
+    BottleneckTSP btsp = BottleneckTSP();
 
 private slots:
     void openFileDialog();

@@ -1,5 +1,5 @@
 #include "bottlenecktsp.h"
-
+#include <map>
 BottleneckTSP::BottleneckTSP()
 {
 
@@ -8,7 +8,8 @@ BottleneckTSP::BottleneckTSP()
 
 Graph* BottleneckTSP::BTSPApprox(Graph *graph)
 {
-
+    Graph* mbst = MBST(graph);
+    return mbst;
 }
 
 Graph* BottleneckTSP::MBST(Graph* graph)
@@ -19,15 +20,17 @@ Graph* BottleneckTSP::MBST(Graph* graph)
     }
 
     float median = computeMedianWeight(graph);
-    vector<Edge*> *vectorA = biggerThanMedian(graph->edgesVector,median);
-    vector<Edge*> *vectorB = smallerThanMedian(graph->edgesVector,median);
+    vector<Edge*> *vectorA, *vectorB ;
+    vectorA = new vector<Edge*>();
+    vectorB = new vector<Edge*>();
+    divideEdgesByMedian(graph->edgesVector,median,vectorA,vectorB);
 
     if(vectorB->size() == graph->edgesVector->size())
     {
         vectorA->push_back(vectorB->at(vectorB->size()-1));
         vectorB->pop_back();
     }
-
+    //TODO: remove edges while checking for cycles
     Forest* forest = createForest(vectorB);
     //check
     if(forest->size == 1)
@@ -37,12 +40,10 @@ Graph* BottleneckTSP::MBST(Graph* graph)
     }
     else{
         Graph* graphPrime = MBSTContract(forest,vectorA,graph->nodeVector);
-
-        //return sum of forest and MBST(graphPrime)
     }
 }
 
-Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector<Edge*> allNodes)
+Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector<Node*>* allNodes)
 {
     vector<Node*> *nodeVector;
     vector<Edge*> *edgeVector;
@@ -51,31 +52,88 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
     {
         Node* node = new Node(forest->componentNodes.at(i),forest->componentEdges.at(i));
         nodeVector->push_back(node);
+        //assingning parents to nodes in components so adding edges would be easier
+        for(int j=0;j<forest->componentNodes.at(i).size();j++)
+        {
+            forest->componentNodes.at(i).at(j)->parent = node;
+        }
+    }
+    
+    
+    for(int i=0;i<allNodes->size();i++)
+    {
+        bool isNotInclued = true;
+        
+        for(int j=0;j<forest->size;j++)
+        {
+            for(int k=0;k<forest->componentNodes.at(j).size();k++)
+            {
+                if(forest->componentNodes.at(j).at(k) == allNodes->at(i))
+                {
+                    isNotInclued = false;
+                    break;
+                }
+            }
+            if(!isNotInclued)break;
+        }
+        
+        if(isNotInclued)
+        {
+            nodeVector->push_back(allNodes->at(i));
+        }
+    }
+    /// for each node check if the edge was already added to to the set of contracted edges. If edge is connecting at least
+    /// one component node than we have to move pointers from nodeVector to realNodesVector and change pointers in nodeVector
+    /// to currently checked nodes. We also want to remember which nodes were already connected (new entity  in map node1-node2 and node2-node1
+
+    map<Node*,vector<Node*>*> edgeConnMap;
+    //create vectors for each node to remeber all connections
+    for(int i=0;i<nodeVector->size();i++)
+    {
+        vector<Node*>* nodes;
+        edgeConnMap.insert(std::pair<Node*,vector<Node*>*>(nodeVector->at(i),nodes));
     }
 
-    for(int i=0;i<allNodes.size();i++)
-    {
-     bool isNotInclued = true;
+    for(int i=0;i<edges->size();i++){
+        Edge* edge;
+        Node* firstNode;
+        Node* secondNode;
+        // find potential nodes of checked edge in contracted graph
+        if(edges->at(i)->nodes.at(0)->parent)
+            firstNode = edges->at(i)->nodes.at(0)->parent;
+        else
+            firstNode = edges->at(i)->nodes.at(0);
 
-     for(int j=0;j<forest->size;j++)
-     {
-         for(int k=0;k<forest->componentNodes.at(j).size();k++)
-         {
-            if(forest->componentNodes.at(j).at(k) == allNodes.at(i))
+        if(edges->at(i)->nodes.at(1)->parent)
+            secondNode = edges->at(i)->nodes.at(1)->parent;
+        else
+            secondNode = edges->at(i)->nodes.at(1);
+
+        vector<Node*>* firstNodeEdgeVector = edgeConnMap[firstNode];
+
+        bool isAlreadyConnected = false;
+        for(int j=0;j<firstNodeEdgeVector->size();j++)
+        {
+            if(firstNodeEdgeVector->at(j) == secondNode)
             {
-                isNotInclued = false;
+                isAlreadyConnected = true;
                 break;
             }
-         }
-         if(!isNotInclued)break;
-     }
+        }
 
-     if(isNotInclued)
-     {
-        nodeVector->push_back(allNodes.at(i));
-     }
+        if(!isAlreadyConnected)
+        {
+            edgeConnMap[firstNode]->push_back(secondNode);
+            edgeConnMap[secondNode]->push_back(firstNode);
+        }
+        edge = new Edge(firstNode,secondNode);
+        edgeVector->push_back(edge);
     }
+
+    return new Graph(nodeVector,edgeVector);
+
 }
+
 Forest* BottleneckTSP::createForest(vector<Edge *> *edgeVector)
 {
     return new Forest(edgeVector);
@@ -89,9 +147,37 @@ float BottleneckTSP::computeMedianWeight(Graph *graph)
     {
         weights[i] = graph->edgesVector->at(i)->weight;
     }
-    return findMedian(weights,graph->edgesVector->size(),0);
+    //TODO: fix findMedian with proper complexity
+    //return findMedian(weights,graph->edgesVector->size(),0);
+    return findMedian(weights,graph->edgesVector->size());
 }
 
+float BottleneckTSP::findMedian(float *v, int size)
+{
+    for(int i=0;i<size;i++)
+    {
+        for(int j=0;j<size-1;j++)
+        {
+            if(v[j]<v[j+1])
+            {
+                float tmp = v[j];
+                v[j] = v[j+1];
+                v[j+1] = tmp;
+            }
+        }
+    }
+    int index = size/2;
+    if(size%2 == 0)
+    {
+        int index2 = index+1;
+        return (v[index]+v[index2])/2;
+    }
+    else{
+        return v[index++];
+    }
+}
+
+//TODO: FIX THIS FUNCTION
 float BottleneckTSP::findMedian(float *v, int n, int k)
 {
    // int find_kth(int *v, int n, int k) {
@@ -147,10 +233,27 @@ vector<Edge*>* BottleneckTSP::biggerThanMedian(vector<Edge *> *edgeVector,
                                                float median)
 {
 
+
 }
 
-vector<Edge*>* BottleneckTSP::smallerThanMedian(vector<Edge *> *edgeVector,
+vector<Edge*>* BottleneckTSP::smallerOrEqualThanMedian(vector<Edge *> *edgeVector,
                                                float median)
 {
 
+
 }
+
+///Divide edges into two sets. Set B contains edges with weights smaller and equal than median,
+/// set A contain edges bigger than median.
+void BottleneckTSP::divideEdgesByMedian(vector<Edge *> *edgeVector, float median,
+                                        vector<Edge *> *vectorA, vector<Edge *> *vectorB)
+{
+    for(int i=0;i<edgeVector->size();i++)
+    {
+        if(edgeVector->at(i)->weight > median)
+            vectorA->push_back(edgeVector->at(i));
+        else
+            vectorB->push_back(edgeVector->at(i));
+    }
+}
+

@@ -1,11 +1,16 @@
 #include "forest.h"
-
+#include <iostream>
 Forest::Forest()
 {
 
 }
 Forest::Forest(vector<Edge *> *edgeVector)
 {
+    for(int i=0;i<edgeVector->size();i++)
+    {
+        cout<<edgeVector->at(i)->nodes[0]<<endl;
+        cout<<edgeVector->at(i)->nodes[1]<<endl;
+    }
     //try to add each edge to a forest
     for(int i=0;i<edgeVector->size();i++)
     {

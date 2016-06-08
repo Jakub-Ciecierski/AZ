@@ -6,9 +6,10 @@ class Edge
 {
 public:
     Edge(Node* firstNode, Node* secondNode);
-    Node* nodes[2];
+    vector<Node*> nodes;
 
     /// pointer to nodes before MBST-Contract (if have been done)
+    Edge* parent;
 
     float weight;
 };

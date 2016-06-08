@@ -11,7 +11,7 @@ class OglWidget : public QGLWidget
 public:
      explicit OglWidget(QWidget *parent = 0);
     ~OglWidget();
-    Graph graph;
+    Graph* graph;
 
 protected:
 

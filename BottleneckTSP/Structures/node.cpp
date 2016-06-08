@@ -10,6 +10,12 @@ Node::Node(float x, float y)
     this->y = y;
 }
 
+Node::Node(vector<Node *> reprNodes, vector<Edge *> reprEdges)
+{
+    this->reprNodes = reprNodes;
+    this->reprEdges = reprEdges;
+}
+
 float Node::getX(){return x;}
 
 float Node::getY(){return y;}
