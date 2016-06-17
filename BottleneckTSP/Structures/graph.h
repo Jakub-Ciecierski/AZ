@@ -12,6 +12,7 @@ public:
     Graph();
     Graph(vector<Node*> *nodeVector,float minX, float maxX, float minY, float maxY);
     Graph(vector<Node*> *nodeVector,vector<Edge*> *edgesVector);
+    Graph(vector<Node*> &nodeVector,vector<Edge*> &edgesVector);
 
     float computeWeight(Node* firstNode, Node* secondNode);
 

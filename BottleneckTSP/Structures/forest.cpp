@@ -6,11 +6,15 @@ Forest::Forest()
 }
 Forest::Forest(vector<Edge *> *edgeVector)
 {
-    for(int i=0;i<edgeVector->size();i++)
+    ///while preventing cycles in graph we may remove some edges.
+    ///Edges not removed from initial set are stored in tmpEdgeVector which will be assigned to initial vector
+    vector<Edge*> tmpEdgeVector;
+
+   /* for(int i=0;i<edgeVector->size();i++)
     {
         cout<<edgeVector->at(i)->nodes[0]<<endl;
         cout<<edgeVector->at(i)->nodes[1]<<endl;
-    }
+    }*/
     //try to add each edge to a forest
     for(int i=0;i<edgeVector->size();i++)
     {
@@ -25,7 +29,6 @@ Forest::Forest(vector<Edge *> *edgeVector)
         {
             for(int k=0;k<componentNodes.at(j).size();k++)
             {
-                //PORÓWNANIE REFERENCJI A NIE WSKAŹNIKA?
                 if(componentNodes.at(j).at(k) == edgeVector->at(i)->nodes[0])
                 {
                     firstNodeInComp = j;
@@ -41,14 +44,16 @@ Forest::Forest(vector<Edge *> *edgeVector)
         {
             componentEdges.at(secondNodeInComp).push_back(edgeVector->at(i));
             componentNodes.at(secondNodeInComp).push_back(edgeVector->at(i)->nodes[0]);
-            componentNodes.at(secondNodeInComp).push_back(edgeVector->at(i)->nodes[1]);
+            //componentNodes.at(secondNodeInComp).push_back(edgeVector->at(i)->nodes[1]);
+            tmpEdgeVector.push_back(edgeVector->at(i));
         }
         //add edge only to component containing first node
         else if(firstNodeInComp != -1 && secondNodeInComp == -1)
         {
             componentEdges.at(firstNodeInComp).push_back(edgeVector->at(i));
-            componentNodes.at(firstNodeInComp).push_back(edgeVector->at(i)->nodes[0]);
+            //componentNodes.at(firstNodeInComp).push_back(edgeVector->at(i)->nodes[0]);
             componentNodes.at(firstNodeInComp).push_back(edgeVector->at(i)->nodes[1]);
+            tmpEdgeVector.push_back(edgeVector->at(i));
         }
         else if(firstNodeInComp != -1 && secondNodeInComp != -1)
         {
@@ -76,6 +81,7 @@ Forest::Forest(vector<Edge *> *edgeVector)
 
             vector<Edge*> newComponentEdges;
             newComponentEdges.push_back(edgeVector->at(i));
+            tmpEdgeVector.push_back(edgeVector->at(i));
             vector<Node*> newComponentNodes;
             newComponentNodes.push_back(edgeVector->at(i)->nodes[0]);
             newComponentNodes.push_back(edgeVector->at(i)->nodes[1]);
@@ -84,6 +90,8 @@ Forest::Forest(vector<Edge *> *edgeVector)
             componentNodes.push_back(newComponentNodes);
         }
     }
-
-    size = componentEdges.size();
+    edgeVector->clear();
+    for(int i=0;i<tmpEdgeVector.size();i++)edgeVector->push_back(tmpEdgeVector.at(i));
+    this->size = componentEdges.size();
+    this->spannedNodes = componentNodes.at(0).size();
 }

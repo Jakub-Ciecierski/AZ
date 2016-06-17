@@ -33,25 +33,26 @@ Graph* BottleneckTSP::MBST(Graph* graph)
     //TODO: remove edges while checking for cycles
     Forest* forest = createForest(vectorB);
     //check
-    if(forest->size == 1)
+    if(forest->size == 1 && forest->spannedNodes == graph->nodeVector->size())
     {
         Graph* graphPrime = new Graph(graph->nodeVector,vectorB);
         return MBST(graphPrime);
     }
     else{
         Graph* graphPrime = MBSTContract(forest,vectorA,graph->nodeVector);
+        return MBST(graphPrime);
     }
 }
 
 Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector<Node*>* allNodes)
 {
-    vector<Node*> *nodeVector;
-    vector<Edge*> *edgeVector;
+    vector<Node*> nodeVector;
+    vector<Edge*> edgeVector;
     //first add nodes representing component of F
     for(int i=0;i<forest->size;i++)
     {
         Node* node = new Node(forest->componentNodes.at(i),forest->componentEdges.at(i));
-        nodeVector->push_back(node);
+        nodeVector.push_back(node);
         //assingning parents to nodes in components so adding edges would be easier
         for(int j=0;j<forest->componentNodes.at(i).size();j++)
         {
@@ -79,19 +80,19 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
         
         if(isNotInclued)
         {
-            nodeVector->push_back(allNodes->at(i));
+            nodeVector.push_back(allNodes->at(i));
         }
     }
     /// for each node check if the edge was already added to to the set of contracted edges. If edge is connecting at least
     /// one component node than we have to move pointers from nodeVector to realNodesVector and change pointers in nodeVector
     /// to currently checked nodes. We also want to remember which nodes were already connected (new entity  in map node1-node2 and node2-node1
 
-    map<Node*,vector<Node*>*> edgeConnMap;
+    map<Node*,vector<Node*>> edgeConnMap;
     //create vectors for each node to remeber all connections
-    for(int i=0;i<nodeVector->size();i++)
+    for(int i=0;i<nodeVector.size();i++)
     {
-        vector<Node*>* nodes;
-        edgeConnMap.insert(std::pair<Node*,vector<Node*>*>(nodeVector->at(i),nodes));
+        vector<Node*> nodes;
+        edgeConnMap.insert(std::pair<Node*,vector<Node*>>(nodeVector.at(i),nodes));
     }
 
     for(int i=0;i<edges->size();i++){
@@ -109,12 +110,12 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
         else
             secondNode = edges->at(i)->nodes.at(1);
 
-        vector<Node*>* firstNodeEdgeVector = edgeConnMap[firstNode];
+        vector<Node*> firstNodeEdgeVector = edgeConnMap[firstNode];
 
         bool isAlreadyConnected = false;
-        for(int j=0;j<firstNodeEdgeVector->size();j++)
+        for(int j=0;j<firstNodeEdgeVector.size();j++)
         {
-            if(firstNodeEdgeVector->at(j) == secondNode)
+            if(firstNodeEdgeVector.at(j) == secondNode)
             {
                 isAlreadyConnected = true;
                 break;
@@ -123,11 +124,11 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
 
         if(!isAlreadyConnected)
         {
-            edgeConnMap[firstNode]->push_back(secondNode);
-            edgeConnMap[secondNode]->push_back(firstNode);
+            edgeConnMap[firstNode].push_back(secondNode);
+            edgeConnMap[secondNode].push_back(firstNode);
         }
         edge = new Edge(firstNode,secondNode);
-        edgeVector->push_back(edge);
+        edgeVector.push_back(edge);
     }
 
     return new Graph(nodeVector,edgeVector);
@@ -169,11 +170,11 @@ float BottleneckTSP::findMedian(float *v, int size)
     int index = size/2;
     if(size%2 == 0)
     {
-        int index2 = index+1;
-        return (v[index]+v[index2])/2;
+     //   int index2 = index+1;
+        return (v[index--]+v[index])/2;
     }
     else{
-        return v[index++];
+        return v[index];
     }
 }
 

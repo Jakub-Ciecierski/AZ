@@ -51,6 +51,20 @@ Graph::Graph(vector<Node *> *nodeVector, vector<Edge *> *edgesVector)
     this->edgesVector = edgesVector;
 }
 
+Graph::Graph(vector<Node *> &nodeVector, vector<Edge *> &edgesVector)
+{
+    this->nodeVector = new vector<Node*>();
+    this->edgesVector = new vector<Edge*>();
+    for(int i=0;i<nodeVector.size();i++)
+    {
+        this->nodeVector->push_back(nodeVector.at(i));
+    }
+    for(int i=0;i<edgesVector.size();i++)
+    {
+        this->edgesVector->push_back(edgesVector.at(i));
+    }
+}
+
 float Graph::computeWeight(Node *firstNode, Node *secondNode)
 {
     return sqrt(pow(firstNode->getX()-secondNode->getX(),2)

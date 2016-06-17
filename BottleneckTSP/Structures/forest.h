@@ -13,6 +13,7 @@ public:
     vector<vector<Edge*>> componentEdges;
     vector<vector<Node*>> componentNodes;
     int size;
+    int spannedNodes;
 };
 
 #endif // FOREST_H
