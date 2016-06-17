@@ -19,23 +19,34 @@ Graph* BottleneckTSP::MBST(Graph* graph)
         return graph;
     }
 
+    /*for(int i=0;i<graph->nodeVector->size();i++)
+    {
+        if(graph->nodeVector->at(i) == NULL)
+        {
+            printf("null/n");
+        }
+    }*/
+
     float median = computeMedianWeight(graph);
     vector<Edge*> *vectorA, *vectorB ;
     vectorA = new vector<Edge*>();
     vectorB = new vector<Edge*>();
     divideEdgesByMedian(graph->edgesVector,median,vectorA,vectorB);
 
+    //move one edge from B to A if A is empty
     if(vectorB->size() == graph->edgesVector->size())
     {
         vectorA->push_back(vectorB->at(vectorB->size()-1));
         vectorB->pop_back();
     }
-    //TODO: remove edges while checking for cycles
+
     Forest* forest = createForest(vectorB);
-    //check
+
+    //TODO: dealocate memory
     if(forest->size == 1 && forest->spannedNodes == graph->nodeVector->size())
     {
         Graph* graphPrime = new Graph(graph->nodeVector,vectorB);
+
         return MBST(graphPrime);
     }
     else{
@@ -61,6 +72,8 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
     }
     
     
+    //TODO: check for null parent (assing null to parent)
+
     for(int i=0;i<allNodes->size();i++)
     {
         bool isNotInclued = true;
@@ -95,17 +108,18 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
         edgeConnMap.insert(std::pair<Node*,vector<Node*>>(nodeVector.at(i),nodes));
     }
 
+    //TODO (BONUS): check for lower weight value
     for(int i=0;i<edges->size();i++){
         Edge* edge;
         Node* firstNode;
         Node* secondNode;
         // find potential nodes of checked edge in contracted graph
-        if(edges->at(i)->nodes.at(0)->parent)
+        if(edges->at(i)->nodes.at(0)->parent != NULL)
             firstNode = edges->at(i)->nodes.at(0)->parent;
         else
             firstNode = edges->at(i)->nodes.at(0);
 
-        if(edges->at(i)->nodes.at(1)->parent)
+        if(edges->at(i)->nodes.at(1)->parent != NULL)
             secondNode = edges->at(i)->nodes.at(1)->parent;
         else
             secondNode = edges->at(i)->nodes.at(1);
@@ -126,11 +140,11 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
         {
             edgeConnMap[firstNode].push_back(secondNode);
             edgeConnMap[secondNode].push_back(firstNode);
+            edge = new Edge(firstNode,secondNode);
+            edgeVector.push_back(edge);
         }
-        edge = new Edge(firstNode,secondNode);
-        edgeVector.push_back(edge);
-    }
 
+    }
     return new Graph(nodeVector,edgeVector);
 
 }

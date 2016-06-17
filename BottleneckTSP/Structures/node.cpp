@@ -2,18 +2,20 @@
 
 Node::Node()
 {
-
+   parent = nullptr;
 }
 Node::Node(float x, float y)
 {
     this->x = x;
     this->y = y;
+    parent = nullptr;
 }
 
 Node::Node(vector<Node *> reprNodes, vector<Edge *> reprEdges)
 {
     this->reprNodes = reprNodes;
     this->reprEdges = reprEdges;
+    this->parent = nullptr;
 }
 
 float Node::getX(){return x;}
