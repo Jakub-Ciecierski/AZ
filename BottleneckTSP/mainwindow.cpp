@@ -84,7 +84,7 @@ void MainWindow::openGraphFile(QString path){
        float maxY = 0;
 
        int counter =0;
-       int leap = 250;
+       int leap = 500;
        for(int i=0;i<vectorSize;i++)
        {
            QString line = in.readLine();
@@ -106,6 +106,19 @@ void MainWindow::openGraphFile(QString path){
 
        Graph* graph = btsp.BTSPApprox(oglWidget->graph);
 
+       *(oglWidget->graph) = *graph;
+       //oglWidget->graph = new Graph(graph->nodeVector,graph->edgesVector);
+
+       /*for(int i=0;i<graph->nodeVector->size();i++)
+       {
+           oglWidget->graph->nodeVector->push_back(graph->nodeVector->at(i));
+       }
+       for(int i=0;i<graph->edgesVector->size();i++)
+       {
+           oglWidget->graph->edgesVector->push_back(graph->edgesVector->at(i));
+       }*/
+
+       oglWidget->graph->isInit = true;
        inputFile.close();
     }else{
         std::cout << "No such file: " << path.toStdString() << std::endl;

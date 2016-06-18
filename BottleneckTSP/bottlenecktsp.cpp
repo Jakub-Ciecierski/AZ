@@ -8,8 +8,9 @@ BottleneckTSP::BottleneckTSP()
 
 Graph* BottleneckTSP::BTSPApprox(Graph *graph)
 {
-    Graph* mbst = MBST(graph);
-    return mbst;
+    Graph* packedMbst = MBST(graph);
+    Graph* unpackedMbst = unpackGraph(packedMbst);
+    return unpackedMbst;
 }
 
 Graph* BottleneckTSP::MBST(Graph* graph)
@@ -76,9 +77,14 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
 
     for(int i=0;i<allNodes->size();i++)
     {
-        bool isNotInclued = true;
+        //bool isNotInclued = true;
         
-        for(int j=0;j<forest->size;j++)
+        if(allNodes->at(i)->parent == nullptr)
+        {
+            nodeVector.push_back(allNodes->at(i));
+        }
+
+        /*for(int j=0;j<forest->size;j++)
         {
             for(int k=0;k<forest->componentNodes.at(j).size();k++)
             {
@@ -89,12 +95,12 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
                 }
             }
             if(!isNotInclued)break;
-        }
+        }*/
         
-        if(isNotInclued)
+       /* if(isNotInclued)
         {
-            nodeVector.push_back(allNodes->at(i));
-        }
+
+        }*/
     }
     /// for each node check if the edge was already added to to the set of contracted edges. If edge is connecting at least
     /// one component node than we have to move pointers from nodeVector to realNodesVector and change pointers in nodeVector
@@ -141,6 +147,7 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
             edgeConnMap[firstNode].push_back(secondNode);
             edgeConnMap[secondNode].push_back(firstNode);
             edge = new Edge(firstNode,secondNode);
+            edge->parent = edges->at(i);
             edgeVector.push_back(edge);
         }
 
@@ -270,5 +277,50 @@ void BottleneckTSP::divideEdgesByMedian(vector<Edge *> *edgeVector, float median
         else
             vectorB->push_back(edgeVector->at(i));
     }
+}
+
+Graph* BottleneckTSP::unpackGraph(Graph * packedGraph)
+{
+    vector<Node*> outNodeVector;
+    vector<Edge*> outEdgeVector;
+    outEdgeVector.push_back(unpackEdge(packedGraph->edgesVector->at(0)));
+    for(int i=0;i<packedGraph->nodeVector->size();i++)
+    {
+        unpackNodes(&outNodeVector,&outEdgeVector,packedGraph->nodeVector->at(i));
+    }
+    Graph* outGraph = new Graph;
+    outGraph->nodeVector = &outNodeVector;
+    outGraph->edgesVector = &outEdgeVector;
+    return outGraph;
+}
+
+Edge* BottleneckTSP::unpackEdge(Edge * inputEdge)
+{
+    Edge* originalEdge = inputEdge;
+    while(originalEdge->parent != nullptr)
+    {
+        originalEdge = originalEdge->parent;
+    }
+    return originalEdge;
+}
+
+void BottleneckTSP::unpackNodes(vector<Node *> *outNodeVector, vector<Edge *> *outEdgeVector, Node* packedNode)
+{
+    if(packedNode->reprNodes.size() == 0)
+    {
+        outNodeVector->push_back(packedNode);
+        return;
+    }
+    for(int i=0;i<packedNode->reprEdges.size();i++)
+    {
+        outEdgeVector->push_back(
+                    packedNode->reprEdges.at(i)
+                    );
+    }
+    for(int i=0;i<packedNode->reprNodes.size();i++)
+    {
+        unpackNodes(outNodeVector,outEdgeVector,packedNode->reprNodes.at(i));
+    }
+
 }
 
