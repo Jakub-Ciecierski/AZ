@@ -15,7 +15,7 @@ Graph* BottleneckTSP::BTSPApprox(Graph *graph)
 
 Graph* BottleneckTSP::MBST(Graph* graph)
 {
-    if(graph->edgesVector->size() == 1)
+    if(graph->edgesVector.size() == 1)
     {
         return graph;
     }
@@ -29,29 +29,27 @@ Graph* BottleneckTSP::MBST(Graph* graph)
     }*/
 
     float median = computeMedianWeight(graph);
-    vector<Edge*> *vectorA, *vectorB ;
-    vectorA = new vector<Edge*>();
-    vectorB = new vector<Edge*>();
-    divideEdgesByMedian(graph->edgesVector,median,vectorA,vectorB);
+    vector<Edge*> vectorA, vectorB ;
+    divideEdgesByMedian(&(graph->edgesVector),median,&vectorA,&vectorB);
 
     //move one edge from B to A if A is empty
-    if(vectorB->size() == graph->edgesVector->size())
+    if(vectorB.size() == graph->edgesVector.size())
     {
-        vectorA->push_back(vectorB->at(vectorB->size()-1));
-        vectorB->pop_back();
+        vectorA.push_back(vectorB.at(vectorB.size()-1));
+        vectorB.pop_back();
     }
 
-    Forest* forest = createForest(vectorB);
+    Forest* forest = createForest(&vectorB);
 
     //TODO: dealocate memory
-    if(forest->size == 1 && forest->spannedNodes == graph->nodeVector->size())
+    if(forest->size == 1 && forest->spannedNodes == graph->nodeVector.size())
     {
-        Graph* graphPrime = new Graph(graph->nodeVector,vectorB);
+        Graph* graphPrime = new Graph(&(graph->nodeVector),&vectorB);
 
         return MBST(graphPrime);
     }
     else{
-        Graph* graphPrime = MBSTContract(forest,vectorA,graph->nodeVector);
+        Graph* graphPrime = MBSTContract(forest,&vectorA,&(graph->nodeVector));
         return MBST(graphPrime);
     }
 }
@@ -164,14 +162,14 @@ Forest* BottleneckTSP::createForest(vector<Edge *> *edgeVector)
 
 float BottleneckTSP::computeMedianWeight(Graph *graph)
 {
-    float* weights = new float[graph->edgesVector->size()];
-    for(int i=0;i<graph->edgesVector->size();i++)
+    float* weights = new float[graph->edgesVector.size()];
+    for(int i=0;i<graph->edgesVector.size();i++)
     {
-        weights[i] = graph->edgesVector->at(i)->weight;
+        weights[i] = graph->edgesVector.at(i)->weight;
     }
     //TODO: fix findMedian with proper complexity
     //return findMedian(weights,graph->edgesVector->size(),0);
-    return findMedian(weights,graph->edgesVector->size());
+    return findMedian(weights,graph->edgesVector.size());
 }
 
 float BottleneckTSP::findMedian(float *v, int size)
@@ -283,14 +281,15 @@ Graph* BottleneckTSP::unpackGraph(Graph * packedGraph)
 {
     vector<Node*> outNodeVector;
     vector<Edge*> outEdgeVector;
-    outEdgeVector.push_back(unpackEdge(packedGraph->edgesVector->at(0)));
-    for(int i=0;i<packedGraph->nodeVector->size();i++)
+    outEdgeVector.push_back(unpackEdge(packedGraph->edgesVector.at(0)));
+    for(int i=0;i<packedGraph->nodeVector.size();i++)
     {
-        unpackNodes(&outNodeVector,&outEdgeVector,packedGraph->nodeVector->at(i));
+        unpackNodes(&outNodeVector,&outEdgeVector,packedGraph->nodeVector.at(i));
     }
     Graph* outGraph = new Graph;
-    outGraph->nodeVector = &outNodeVector;
-    outGraph->edgesVector = &outEdgeVector;
+    //suspicious
+    outGraph->nodeVector = outNodeVector;
+    outGraph->edgesVector = outEdgeVector;
     return outGraph;
 }
 
@@ -314,7 +313,7 @@ void BottleneckTSP::unpackNodes(vector<Node *> *outNodeVector, vector<Edge *> *o
     for(int i=0;i<packedNode->reprEdges.size();i++)
     {
         outEdgeVector->push_back(
-                    packedNode->reprEdges.at(i)
+                    unpackEdge(packedNode->reprEdges.at(i))
                     );
     }
     for(int i=0;i<packedNode->reprNodes.size();i++)

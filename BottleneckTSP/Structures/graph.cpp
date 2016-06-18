@@ -13,7 +13,7 @@ Graph::Graph(vector<Node*> *nodeVector, float minX, float maxX, float minY, floa
     float divisor;
     if((maxX-minX)>(maxY-minY)) divisor = maxX - minX;
     else divisor = maxY - minY;
-    this->nodeVector = nodeVector;
+    this->nodeVector = *nodeVector;
 
     for(int i=0;i<nodeVector->size();i++)
     {
@@ -30,8 +30,8 @@ Graph::Graph(vector<Node*> *nodeVector, float minX, float maxX, float minY, floa
             size ++;
         }
     }
-    this->edgesVector = new vector<Edge*>();
-    this->edgesVector->resize(size);
+
+    this->edgesVector.resize(size);
     int num = 0;
     for(int i=0;i<nodeVector->size()-1;i++)
     {
@@ -39,7 +39,7 @@ Graph::Graph(vector<Node*> *nodeVector, float minX, float maxX, float minY, floa
         {
             Edge* edge = new Edge(nodeVector->at(i),nodeVector->at(j));
             edge->weight = computeWeight(nodeVector->at(i),nodeVector->at(j));
-            this->edgesVector->at(num) = edge;
+            this->edgesVector.at(num) = edge;
             num++;
         }
     }
@@ -47,21 +47,21 @@ Graph::Graph(vector<Node*> *nodeVector, float minX, float maxX, float minY, floa
 
 Graph::Graph(vector<Node *> *nodeVector, vector<Edge *> *edgesVector)
 {
-    this->nodeVector = nodeVector;
-    this->edgesVector = edgesVector;
+    this->nodeVector = *nodeVector;
+    this->edgesVector = *edgesVector;
 }
 
 Graph::Graph(vector<Node *> &nodeVector, vector<Edge *> &edgesVector)
 {
-    this->nodeVector = new vector<Node*>();
-    this->edgesVector = new vector<Edge*>();
+    this->nodeVector.clear();
+    this->edgesVector.clear();
     for(int i=0;i<nodeVector.size();i++)
     {
-        this->nodeVector->push_back(nodeVector.at(i));
+        this->nodeVector.push_back(nodeVector.at(i));
     }
     for(int i=0;i<edgesVector.size();i++)
     {
-        this->edgesVector->push_back(edgesVector.at(i));
+        this->edgesVector.push_back(edgesVector.at(i));
     }
 }
 

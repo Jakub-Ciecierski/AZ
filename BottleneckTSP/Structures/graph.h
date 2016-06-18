@@ -16,8 +16,8 @@ public:
 
     float computeWeight(Node* firstNode, Node* secondNode);
 
-    vector<Node*> *nodeVector;
-    vector<Edge*> *edgesVector;
+    vector<Node*> nodeVector;
+    vector<Edge*> edgesVector;
     bool isInit = false;
 };
 

@@ -80,13 +80,28 @@ void OglWidget::draw()
     transMat = glm::translate(transMat,vec3(xTranslation,yTranslation,0.0));
     //vec3 scalingFactor = glm::vec3(scale);
 
-    for(int i=0;i<graph->nodeVector->size();i++)
+    for(int i=0;i<graph->nodeVector.size();i++)
     {
 
-        vec4 tmpVec = vec4(vec2(graph->nodeVector->at(i)->getY(),graph->nodeVector->at(i)->getX()),1.0,1.0);
+        vec4 tmpVec = vec4(vec2(graph->nodeVector.at(i)->getY(),graph->nodeVector.at(i)->getX()),1.0,1.0);
                 tmpVec = transMat  * tmpVec;
         glVertex2f((tmpVec.x/xRatio * -1),
                    tmpVec.y/yRatio + 0.5);
+    }
+    glEnd();
+    glBegin(GL_LINES);
+    for(int i=0;i<graph->edgesVector.size();i++)
+    {
+        vec4 tmpVec1 = vec4(vec2(graph->edgesVector.at(i)->nodes.at(0)->getY(),graph->edgesVector.at(i)->nodes.at(0)->getX()),1.0,1.0);
+                tmpVec1 = transMat  * tmpVec1;
+        vec4 tmpVec2 = vec4(vec2(graph->edgesVector.at(i)->nodes.at(1)->getY(),graph->edgesVector.at(i)->nodes.at(1)->getX()),1.0,1.0);
+                tmpVec2 = transMat  * tmpVec2;
+        glVertex2f((tmpVec1.x/xRatio * -1),
+                   tmpVec1.y/yRatio + 0.5);
+        glVertex2f((tmpVec2.x/xRatio * -1),
+                   tmpVec2.y/yRatio + 0.5);
+
+
     }
     glEnd();
 }
