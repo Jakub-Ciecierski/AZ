@@ -1,71 +1,14 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "btsp_workshop.h"
 #include <QTextStream>
 #include <iostream>
+#include <sstream>
+#include <QFile>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
-{
-    fileDialog = new QFileDialog(this);
-    setupLayout();
-    setupMenuBar();
+BTSPWorkshop::BTSPWorkshop(){
 
-    openUSAMap();
 }
 
-MainWindow::~MainWindow()
-{
-    delete fileDialog;
-
-    delete oglWidget;
-    delete oglWidget2;
-    delete oglWidget3;
-}
-
-void MainWindow::openUSAMap(){
-    QString path = "../resources/usa115475.tsp";
-    //QString path = "../resources/mein.tsp";
-    openGraphFile(path);
-}
-
-void MainWindow::setupLayout()
-{
-    mainLayout = new QVBoxLayout;
-    oglWidgetLayout = new QHBoxLayout;
-
-    oglWidget = new OglWidget();
-    oglWidget2 = new OglWidget();
-    oglWidget3 = new OglWidget();
-
-    oglWidgetLayout->addWidget(oglWidget);
-    //oglWidgetLayout->addWidget(oglWidget2);
-    //oglWidgetLayout->addWidget(oglWidget3);
-
-    mainLayout->addLayout(oglWidgetLayout);
-
-    centralWidget = new QWidget(this);
-    this->setCentralWidget( centralWidget );
-    centralWidget->setLayout(mainLayout);
-}
-
-void MainWindow::setupMenuBar()
-{
-    fileMenu = menuBar()->addMenu("File");
-    openFile = new QAction(tr("Open file"),this);
-    connect(openFile,SIGNAL(triggered(bool)),this,SLOT(openFileDialog()));
-    fileMenu->addAction(openFile);
-}
-
-void MainWindow::openFileDialog()
-{
-    setlocale(LC_ALL, "C");
-    fileDialog->show();
-    QString path = fileDialog->getOpenFileName();
-
-    openGraphFile(path);
-}
-
-void MainWindow::openGraphFile(QString path, int leap){
+Graph* BTSPWorkshop::openGraphFile(QString path, int leap){
     Graph* graph = NULL;
     QFile inputFile(path);
     if (inputFile.open(QIODevice::ReadOnly))
@@ -124,4 +67,22 @@ void MainWindow::openGraphFile(QString path, int leap){
     }else{
         std::cout << "No such file: " << path.toStdString() << std::endl;
     }
+    return graph;
+}
+
+
+void BTSPWorkshop::runBruteForce(){
+
+}
+
+void BTSPWorkshop::runUSASmall(){
+
+}
+
+void BTSPWorkshop::runUSAMedium(){
+
+}
+
+void BTSPWorkshop::runUSABig(){
+
 }

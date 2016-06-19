@@ -6,8 +6,7 @@
 
 using namespace glm;
 OglWidget::OglWidget(QWidget *parent):
-    QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
-{
+    QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
     timerId = startTimer(17);
     this->setFocusPolicy(Qt::ClickFocus);
     this->installEventFilter(this);

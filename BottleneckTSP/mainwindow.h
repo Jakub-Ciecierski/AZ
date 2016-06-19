@@ -48,14 +48,18 @@ private:
     QMenu *fileMenu;
     QAction *openFile;
     QFileDialog *fileDialog;
+
     OglWidget *oglWidget;
+    OglWidget* oglWidget2;
+    OglWidget* oglWidget3;
+
     QVBoxLayout *mainLayout;
     QHBoxLayout *oglWidgetLayout;
 
     void setupLayout();
     void setupMenuBar();
 
-    void openGraphFile(QString path);
+    void openGraphFile(QString path, int leap = 1);
 
     BottleneckTSP btsp = BottleneckTSP();
 
