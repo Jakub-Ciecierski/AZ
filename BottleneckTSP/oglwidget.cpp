@@ -110,7 +110,9 @@ void OglWidget::draw()
 
     float mapColor[4] = {0.0f, 0.7f, 0.0f, 1.0f};
     float rootColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+
     float edgesColor[4] = {0.5f, 0.4f, 0.0f, 0.5f};
+    float bottleneckColor[4] = {0.9f, 0.8f, 0.0f, 0.9f};
 
 
     mat4 transMat;
@@ -137,13 +139,22 @@ void OglWidget::draw()
     }
 
     if(drawEdges){
-        glColor4f(edgesColor[0], edgesColor[1], edgesColor[2], edgesColor[3]);
-        glLineWidth(0.5f);
-        glBegin(GL_LINES);
         for(int i=0;i<graph->edgesVector.size();i++){
-            if(runAnimation)
+            if(runAnimation){
                 if(i > currentEdgeLimit) break;
+            }
 
+            if(graph->bottleneckIndex == i){
+                glColor4f(bottleneckColor[0], bottleneckColor[1],
+                        bottleneckColor[2], bottleneckColor[3]);
+                glLineWidth(0.9f);
+            }else{
+                glColor4f(edgesColor[0], edgesColor[1],
+                        edgesColor[2], edgesColor[3]);
+                glLineWidth(0.5f);
+            }
+
+            glBegin(GL_LINES);
             vec4 tmpVec1 = vec4(vec2(graph->edgesVector.at(i)->nodes.at(0)->getY(),graph->edgesVector.at(i)->nodes.at(0)->getX()),1.0,1.0);
                     tmpVec1 = transMat  * tmpVec1;
             vec4 tmpVec2 = vec4(vec2(graph->edgesVector.at(i)->nodes.at(1)->getY(),graph->edgesVector.at(i)->nodes.at(1)->getX()),1.0,1.0);
@@ -153,9 +164,8 @@ void OglWidget::draw()
             glVertex2f((tmpVec2.x/xRatio * -1),
                        tmpVec2.y/yRatio + 0.5);
 
-
+            glEnd();
         }
-        glEnd();
     }
 }
 

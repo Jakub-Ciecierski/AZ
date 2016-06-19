@@ -95,6 +95,20 @@ BTSPResult BTSPWorkshop::runTest(QString path, int leap){
     Graph* resultGraph = btsp.BTSPApprox(originalGraph);
 
     BTSPResult results{originalGraph, resultGraph};
+    resultGraph->getBottleneck();
+
+    float sumOfWeights = 0;
+    float bottleneck = 0;
+    for(int i = 0; i < resultGraph->edgesVector.size(); i++){
+        Edge* edge = resultGraph->edgesVector[i];
+        sumOfWeights += edge->weight;
+        if(edge->weight > bottleneck){
+            bottleneck = edge->weight;
+            resultGraph->bottleneckIndex = i;
+        }
+    }
+    std::cout << "Sum Of Weight: " << sumOfWeights << std::endl;
+    std::cout << "Bottleneck: " << bottleneck << std::endl;
 
     return results;
 }

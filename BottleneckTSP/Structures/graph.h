@@ -23,6 +23,8 @@ public:
 
     Node* root;
 
+    int bottleneckIndex;
+
     bool isInit = false;
 };
 

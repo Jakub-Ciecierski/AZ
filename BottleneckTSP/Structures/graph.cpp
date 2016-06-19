@@ -76,7 +76,10 @@ float Graph::getBottleneck()
     float max = 0;
     for(int i=0;i<edgesVector.size();i++)
     {
-        if(edgesVector.at(i)->weight >max) max = edgesVector.at(i)->weight ;
+        if(edgesVector.at(i)->weight > max) {
+            bottleneckIndex = i;
+            max = edgesVector.at(i)->weight;
+        }
     }
     return max;
 }
