@@ -10,8 +10,10 @@ Graph* BottleneckTSP::BTSPApprox(Graph *graph)
 {
     Graph* packedMbst = MBST(graph);
     Graph* unpackedMbst = unpackGraph(packedMbst);
+    float bottleneck = unpackedMbst->getBottleneck();
     Graph* standardTree = createStandardTree(unpackedMbst);
     Graph* btspCycle = createBTSPGraph(standardTree);
+    bottleneck = btspCycle->getBottleneck();
     return btspCycle;
 }
 

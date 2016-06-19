@@ -84,7 +84,7 @@ void MainWindow::openGraphFile(QString path){
        float maxY = 0;
 
        int counter =0;
-       int leap = 1000;
+       int leap = 8000;
        for(int i=0;i<vectorSize;i++)
        {
            QString line = in.readLine();

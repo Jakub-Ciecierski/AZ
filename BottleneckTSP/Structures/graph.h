@@ -15,7 +15,9 @@ public:
     Graph(vector<Node*> &nodeVector,vector<Edge*> &edgesVector);
 
     float computeWeight(Node* firstNode, Node* secondNode);
+    float getBottleneck();
     int size;
+
     vector<Node*> nodeVector;
     vector<Edge*> edgesVector;
 

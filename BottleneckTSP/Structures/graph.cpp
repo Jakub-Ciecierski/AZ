@@ -70,3 +70,13 @@ float Graph::computeWeight(Node *firstNode, Node *secondNode)
     return sqrt(pow(firstNode->getX()-secondNode->getX(),2)
                 +pow(firstNode->getY()-secondNode->getY(),2));
 }
+
+float Graph::getBottleneck()
+{
+    float max = 0;
+    for(int i=0;i<edgesVector.size();i++)
+    {
+        if(edgesVector.at(i)->weight >max) max = edgesVector.at(i)->weight ;
+    }
+    return max;
+}
