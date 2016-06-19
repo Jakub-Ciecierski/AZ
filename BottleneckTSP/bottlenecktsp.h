@@ -22,7 +22,7 @@ private:
 
     void unpackNodes(vector<Node*>* outNodeVector, vector<Edge*>* outEdgeVector, Node* packedNode);
 
-    Forest* createForest(vector<Edge*> *edgeVector);
+    Forest* createForest(vector<Edge*> *edgeVector, int graphSize);
 
     float computeMedianWeight(Graph* graph);
 

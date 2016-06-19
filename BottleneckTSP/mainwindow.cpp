@@ -19,8 +19,8 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::openUSAMap(){
-    QString path = "../resources/usa115475.tsp";
-    //QString path = "../resources/mein.tsp";
+    //QString path = "../resources/usa115475.tsp";
+    QString path = "../resources/mein.tsp";
     openGraphFile(path);
 }
 

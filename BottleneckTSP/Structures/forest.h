@@ -8,7 +8,7 @@ class Forest
 {
 public:
     Forest();
-    Forest(vector<Edge*> *edgeVector);
+    Forest(vector<Edge*> *edgeVector, int graphSize);
 
     vector<vector<Edge*>> componentEdges;
     vector<vector<Node*>> componentNodes;

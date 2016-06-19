@@ -20,6 +20,11 @@ Graph* BottleneckTSP::MBST(Graph* graph)
         return graph;
     }
 
+    /*if(graph->edgesVector.size() == graph->nodeVector.size()-1)
+    {
+        return graph;
+    }*/
+
     /*for(int i=0;i<graph->nodeVector->size();i++)
     {
         if(graph->nodeVector->at(i) == NULL)
@@ -39,7 +44,7 @@ Graph* BottleneckTSP::MBST(Graph* graph)
         vectorB.pop_back();
     }
 
-    Forest* forest = createForest(&vectorB);
+    Forest* forest = createForest(&vectorB, graph->nodeVector.size());
 
     //TODO: dealocate memory
     if(forest->size == 1 && forest->spannedNodes == graph->nodeVector.size())
@@ -154,9 +159,9 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
 
 }
 
-Forest* BottleneckTSP::createForest(vector<Edge *> *edgeVector)
+Forest* BottleneckTSP::createForest(vector<Edge *> *edgeVector, int graphSize)
 {
-    return new Forest(edgeVector);
+    return new Forest(edgeVector,graphSize);
 }
 
 
@@ -281,11 +286,15 @@ Graph* BottleneckTSP::unpackGraph(Graph * packedGraph)
 {
     vector<Node*> outNodeVector;
     vector<Edge*> outEdgeVector;
-    outEdgeVector.push_back(unpackEdge(packedGraph->edgesVector.at(0)));
+    for(int i=0;i<packedGraph->edgesVector.size();i++)
+    {
+    outEdgeVector.push_back(unpackEdge(packedGraph->edgesVector.at(i)));
+    }
     for(int i=0;i<packedGraph->nodeVector.size();i++)
     {
         unpackNodes(&outNodeVector,&outEdgeVector,packedGraph->nodeVector.at(i));
     }
+
     Graph* outGraph = new Graph;
     //suspicious
     outGraph->nodeVector = outNodeVector;

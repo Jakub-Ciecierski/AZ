@@ -4,8 +4,27 @@ Forest::Forest()
 {
 
 }
-Forest::Forest(vector<Edge *> *edgeVector)
+Forest::Forest(vector<Edge *> *edgeVector, int graphSize)
 {
+
+    //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111111
+    /// TRZYMAĆ KRAWĘDZIE POSORTOWANE I JEŻELI JAKAŚ NOWA KRAWĘDŹ SPOWODOWAŁABY POWSTANIE CYKLU TO MUSIMY WYWALIĆ TĄ Z NAJWIĘKSZĄ WAGĄ
+    /// UBER TMP!!!!!!1
+    ///
+
+    /*for(int i=0;i<edgeVector->size();i++)
+    {
+        for(int j=0;j<edgeVector->size()-1;j++)
+        {
+            if(edgeVector->at(j)->weight > edgeVector->at(j+1)->weight)
+            {
+                Edge* tmp = edgeVector->at(j);
+                edgeVector->at(j) = edgeVector->at(j+1);
+                edgeVector->at(j+1) = tmp;
+            }
+        }
+    }*/
+
     ///while preventing cycles in graph we may remove some edges.
     ///Edges not removed from initial set are stored in tmpEdgeVector which will be assigned to initial vector
     vector<Edge*> tmpEdgeVector;
@@ -71,8 +90,13 @@ Forest::Forest(vector<Edge *> *edgeVector)
                 {
                     componentNodes.at(secondNodeInComp).push_back(componentNodes.at(firstNodeInComp).at(j));
                 }
+                //adding current checked edge to merged component
+                componentEdges.at(secondNodeInComp).push_back(edgeVector->at(i));
+
                 componentEdges.erase(componentEdges.begin()+firstNodeInComp);
                 componentNodes.erase(componentNodes.begin()+firstNodeInComp);
+
+                tmpEdgeVector.push_back(edgeVector->at(i));
             }
         }
         else
@@ -90,8 +114,13 @@ Forest::Forest(vector<Edge *> *edgeVector)
             componentNodes.push_back(newComponentNodes);
         }
     }
+    if(graphSize != componentNodes.at(0).size())
+    {
     edgeVector->clear();
     for(int i=0;i<tmpEdgeVector.size();i++)edgeVector->push_back(tmpEdgeVector.at(i));
+    }
+    /*edgeVector->clear();
+    for(int i=0;i<tmpEdgeVector.size();i++)edgeVector->push_back(tmpEdgeVector.at(i));*/
     this->size = componentEdges.size();
     this->spannedNodes = componentNodes.at(0).size();
 }
