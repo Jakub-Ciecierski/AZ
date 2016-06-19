@@ -76,14 +76,14 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
             forest->componentNodes.at(i).at(j)->parent = node;
         }
     }
-    
-    
+
+
     //TODO: check for null parent (assing null to parent)
 
     for(int i=0;i<allNodes->size();i++)
     {
         //bool isNotInclued = true;
-        
+
         if(allNodes->at(i)->parent == nullptr)
         {
             nodeVector.push_back(allNodes->at(i));
@@ -101,7 +101,7 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
             }
             if(!isNotInclued)break;
         }*/
-        
+
        /* if(isNotInclued)
         {
 

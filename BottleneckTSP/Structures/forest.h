@@ -9,9 +9,9 @@ class Forest
 public:
     Forest();
     Forest(vector<Edge*> *edgeVector, int graphSize);
-
     vector<vector<Edge*>> componentEdges;
     vector<vector<Node*>> componentNodes;
+
     int size;
     int spannedNodes;
 };

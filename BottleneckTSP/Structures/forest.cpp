@@ -12,7 +12,7 @@ Forest::Forest(vector<Edge *> *edgeVector, int graphSize)
     /// UBER TMP!!!!!!1
     ///
 
-    for(int i=0;i<edgeVector->size();i++)
+    /*for(int i=0;i<edgeVector->size();i++)
     {
         for(int j=0;j<edgeVector->size()-1;j++)
         {
@@ -23,7 +23,7 @@ Forest::Forest(vector<Edge *> *edgeVector, int graphSize)
                 edgeVector->at(j+1) = tmp;
             }
         }
-    }
+    }*/
 
     ///while preventing cycles in graph we may remove some edges.
     ///Edges not removed from initial set are stored in tmpEdgeVector which will be assigned to initial vector
