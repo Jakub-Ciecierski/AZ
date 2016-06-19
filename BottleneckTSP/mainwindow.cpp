@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupLayout();
     setupMenuBar();
 
-    openUSAMap();
+    //openUSAMap();
 }
 
 MainWindow::~MainWindow()
@@ -38,7 +38,7 @@ void MainWindow::setupLayout()
     oglWidget3 = new OglWidget();
 
     oglWidgetLayout->addWidget(oglWidget);
-    //oglWidgetLayout->addWidget(oglWidget2);
+    oglWidgetLayout->addWidget(oglWidget2);
     //oglWidgetLayout->addWidget(oglWidget3);
 
     mainLayout->addLayout(oglWidgetLayout);
@@ -54,6 +54,26 @@ void MainWindow::setupMenuBar()
     openFile = new QAction(tr("Open file"),this);
     connect(openFile,SIGNAL(triggered(bool)),this,SLOT(openFileDialog()));
     fileMenu->addAction(openFile);
+
+    experimentsMenu = menuBar()->addMenu("Run");
+    runBrutForceAction = new QAction(tr("Run BruteForce"),this);
+    runUSASmallAction = new QAction(tr("Run USA Small"),this);
+    runUSAMediumAction = new QAction(tr("Run USA Medium"),this);
+    runUSALargeAction = new QAction(tr("Run USA Big"),this);
+
+    experimentsMenu->addAction(runBrutForceAction);
+    experimentsMenu->addAction(runUSASmallAction);
+    experimentsMenu->addAction(runUSAMediumAction);
+    experimentsMenu->addAction(runUSALargeAction);
+    connect(runBrutForceAction,SIGNAL(triggered(bool)),this,SLOT(runBruteforceExperiment()));
+    connect(runUSASmallAction,SIGNAL(triggered(bool)),this,SLOT(runUSASmallExperiment()));
+    connect(runUSAMediumAction,SIGNAL(triggered(bool)),this,SLOT(runUSAMediumExperiment()));
+    connect(runUSALargeAction,SIGNAL(triggered(bool)),this,SLOT(runUSABigExperiment()));
+
+    editMenu = menuBar()->addMenu("Edit");
+    runAnimationAction = new QAction(tr("Animation on/off"),this);
+    editMenu->addAction(runAnimationAction);
+    connect(runAnimationAction,SIGNAL(triggered(bool)),this,SLOT(runAnimation()));
 }
 
 void MainWindow::openFileDialog()
@@ -95,6 +115,9 @@ void MainWindow::openGraphFile(QString path, int leap){
        float maxY = 0;
 
        int counter =0;
+
+       int leap = 1000;
+
        for(int i=0;i<vectorSize;i++)
        {
            QString line = in.readLine();
@@ -124,4 +147,52 @@ void MainWindow::openGraphFile(QString path, int leap){
     }else{
         std::cout << "No such file: " << path.toStdString() << std::endl;
     }
+}
+
+void MainWindow::setResult(BTSPResult result, bool drawEdges){
+    if(oglWidget->graph != NULL)
+        delete oglWidget->graph;
+    if(oglWidget2->graph != NULL)
+        delete oglWidget2->graph;
+
+    oglWidget->graph = result.originalGraph;
+    oglWidget->drawEdges = drawEdges;
+
+    oglWidget2->graph = result.btspGraph;
+}
+
+void MainWindow::runBruteforceExperiment(){
+    BTSPWorkshop btspWorkshop;
+
+    BTSPResult result = btspWorkshop.runBruteForce();
+    setResult(result);
+}
+
+void MainWindow::runUSASmallExperiment(){
+    BTSPWorkshop btspWorkshop;
+
+    BTSPResult result = btspWorkshop.runUSASmall();
+
+    setResult(result, false);
+}
+
+void MainWindow::runUSAMediumExperiment(){
+    BTSPWorkshop btspWorkshop;
+
+    BTSPResult result = btspWorkshop.runUSAMedium();
+
+    setResult(result, false);
+}
+
+void MainWindow::runUSABigExperiment(){
+    BTSPWorkshop btspWorkshop;
+
+    BTSPResult result = btspWorkshop.runUSABig();
+
+    setResult(result, false);
+}
+
+void MainWindow::runAnimation(){
+    bool currentValue = oglWidget2->isRunAnimation();
+    oglWidget2->setRunAnimation(!currentValue);
 }

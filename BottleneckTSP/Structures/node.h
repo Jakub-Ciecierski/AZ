@@ -11,11 +11,14 @@ public:
     Node(float x, float y);
     Node(vector<Node*> reprNodes,vector<Edge*> reprEdges);
 
-   // vector<Node*> nodeVector;
+    // vector<Node*> nodeVector;
 
     /// vectors storing pointers to nodes and edges
     /// represented by this node after MTSB-Contract. Should be null if its normal node
     Node* parent;
+    float distanceToParent;
+    bool wasVisited;
+    vector<Node*> children;
 
     vector<Node*> reprNodes;
     vector<Edge*> reprEdges;

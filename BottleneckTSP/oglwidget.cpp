@@ -3,17 +3,39 @@
 #include <glm/vec4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <QTime>
+#include <iostream>
 
 using namespace glm;
+
 OglWidget::OglWidget(QWidget *parent):
     QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
+
     timerId = startTimer(17);
     this->setFocusPolicy(Qt::ClickFocus);
     this->installEventFilter(this);
+
+    graph = NULL;
+    drawEdges = true;
+    runAnimation = false;
+
+    timer.start();
 }
+
 OglWidget::~OglWidget()
 {
     killTimer(timerId);
+}
+
+void OglWidget::setRunAnimation(bool value){
+    this->runAnimation = value;
+
+    currentEdgeLimit = 0;
+    timer.start();
+}
+
+bool OglWidget::isRunAnimation(){
+    return this->runAnimation;
 }
 
 QSize OglWidget::minimumSizeHint() const
@@ -62,47 +84,79 @@ void OglWidget::resizeGL(int width, int height)
 void OglWidget::timerEvent(QTimerEvent *event)
 {
    updateGL();
+
+   int elapsed = timer.elapsed();
+   if(elapsed > dtMS){
+       if(graph != NULL){
+           currentEdgeLimit++;
+           if(currentEdgeLimit >= graph->edgesVector.size()){
+               currentEdgeLimit = 0;
+           }
+       }
+
+       timer.start();
+   }
 }
 
 void OglWidget::draw()
 {
-    if(!graph->isInit) return;
+    if(graph == NULL) return;
+
     glEnable(GL_BLEND);
     glBlendEquation(GL_MAX);
-    glLineWidth(1);
-    glBegin(GL_POINTS);
+
+    float nodeSize = 4.0f;
+    float rootSize = 6.0f;
 
     float mapColor[4] = {0.0f, 0.7f, 0.0f, 1.0f};
-    glColor4f(mapColor[0], mapColor[1], mapColor[2], mapColor[3]);
+    float rootColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+    float edgesColor[4] = {0.5f, 0.4f, 0.0f, 0.5f};
+
+
     mat4 transMat;
     transMat = glm::scale(transMat,vec3(scale));
     transMat = glm::translate(transMat,vec3(xTranslation,yTranslation,0.0));
     //vec3 scalingFactor = glm::vec3(scale);
 
+
     for(int i=0;i<graph->nodeVector.size();i++)
     {
-
+        if(graph->nodeVector.at(i) == graph->root){
+            glColor4f(rootColor[0], rootColor[1], rootColor[2], rootColor[3]);
+            glPointSize(rootSize);
+        }else{
+            glColor4f(mapColor[0], mapColor[1], mapColor[2], mapColor[3]);
+            glPointSize(nodeSize);
+        }
+            glBegin(GL_POINTS);
         vec4 tmpVec = vec4(vec2(graph->nodeVector.at(i)->getY(),graph->nodeVector.at(i)->getX()),1.0,1.0);
-                tmpVec = transMat  * tmpVec;
+        tmpVec = transMat  * tmpVec;
         glVertex2f((tmpVec.x/xRatio * -1),
                    tmpVec.y/yRatio + 0.5);
+            glEnd();
     }
-    glEnd();
-    glBegin(GL_LINES);
-    for(int i=0;i<graph->edgesVector.size();i++)
-    {
-        vec4 tmpVec1 = vec4(vec2(graph->edgesVector.at(i)->nodes.at(0)->getY(),graph->edgesVector.at(i)->nodes.at(0)->getX()),1.0,1.0);
-                tmpVec1 = transMat  * tmpVec1;
-        vec4 tmpVec2 = vec4(vec2(graph->edgesVector.at(i)->nodes.at(1)->getY(),graph->edgesVector.at(i)->nodes.at(1)->getX()),1.0,1.0);
-                tmpVec2 = transMat  * tmpVec2;
-        glVertex2f((tmpVec1.x/xRatio * -1),
-                   tmpVec1.y/yRatio + 0.5);
-        glVertex2f((tmpVec2.x/xRatio * -1),
-                   tmpVec2.y/yRatio + 0.5);
+
+    if(drawEdges){
+        glColor4f(edgesColor[0], edgesColor[1], edgesColor[2], edgesColor[3]);
+        glLineWidth(0.5f);
+        glBegin(GL_LINES);
+        for(int i=0;i<graph->edgesVector.size();i++){
+            if(runAnimation)
+                if(i > currentEdgeLimit) break;
+
+            vec4 tmpVec1 = vec4(vec2(graph->edgesVector.at(i)->nodes.at(0)->getY(),graph->edgesVector.at(i)->nodes.at(0)->getX()),1.0,1.0);
+                    tmpVec1 = transMat  * tmpVec1;
+            vec4 tmpVec2 = vec4(vec2(graph->edgesVector.at(i)->nodes.at(1)->getY(),graph->edgesVector.at(i)->nodes.at(1)->getX()),1.0,1.0);
+                    tmpVec2 = transMat  * tmpVec2;
+            glVertex2f((tmpVec1.x/xRatio * -1),
+                       tmpVec1.y/yRatio + 0.5);
+            glVertex2f((tmpVec2.x/xRatio * -1),
+                       tmpVec2.y/yRatio + 0.5);
 
 
+        }
+        glEnd();
     }
-    glEnd();
 }
 
 

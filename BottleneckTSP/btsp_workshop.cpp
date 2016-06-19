@@ -3,9 +3,27 @@
 #include <iostream>
 #include <sstream>
 #include <QFile>
+#include "bottlenecktsp.h"
 
 BTSPWorkshop::BTSPWorkshop(){
 
+}
+
+std::vector<std::string> & BTSPWorkshop::split(const std::string &s, char delim,
+                                               std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
+
+std::vector<std::string> BTSPWorkshop::split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, elems);
+    return elems;
 }
 
 Graph* BTSPWorkshop::openGraphFile(QString path, int leap){
@@ -32,8 +50,8 @@ Graph* BTSPWorkshop::openGraphFile(QString path, int leap){
               in.readLine();
           }
        }
-       float minX =1000000000000;
-       float minY=1000000000000;
+       float minX = 1000000000000;
+       float minY = 1000000000000;
        float maxX = 0;
        float maxY = 0;
 
@@ -70,19 +88,41 @@ Graph* BTSPWorkshop::openGraphFile(QString path, int leap){
     return graph;
 }
 
+BTSPResult BTSPWorkshop::runTest(QString path, int leap){
+    BottleneckTSP btsp;
 
-void BTSPWorkshop::runBruteForce(){
+    Graph* originalGraph = openGraphFile(path, leap);
+    Graph* resultGraph = btsp.BTSPApprox(originalGraph);
 
+    BTSPResult results{originalGraph, resultGraph};
+
+    return results;
 }
 
-void BTSPWorkshop::runUSASmall(){
+BTSPResult BTSPWorkshop::runBruteForce(){
+    QString path = "../resources/mein.tsp";
+    int leap = 1;
 
+    return runTest(path, leap);
 }
 
-void BTSPWorkshop::runUSAMedium(){
+BTSPResult BTSPWorkshop::runUSASmall(){
+    QString path = "../resources/usa115475.tsp";
+    int leap = 1000;
 
+    return runTest(path, leap);
 }
 
-void BTSPWorkshop::runUSABig(){
+BTSPResult BTSPWorkshop::runUSAMedium(){
+    QString path = "../resources/usa115475.tsp";
+    int leap = 750;
 
+    return runTest(path, leap);
+}
+
+BTSPResult BTSPWorkshop::runUSABig(){
+    QString path = "../resources/usa115475.tsp";
+    int leap = 400;
+
+    return runTest(path, leap);
 }

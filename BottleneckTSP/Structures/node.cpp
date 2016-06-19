@@ -2,13 +2,15 @@
 
 Node::Node()
 {
-   parent = nullptr;
+   this->parent = nullptr;
+   this->wasVisited = false;
 }
 Node::Node(float x, float y)
 {
     this->x = x;
     this->y = y;
-    parent = nullptr;
+    this->parent = nullptr;
+    this->wasVisited = false;
 }
 
 Node::Node(vector<Node *> reprNodes, vector<Edge *> reprEdges)
@@ -16,6 +18,8 @@ Node::Node(vector<Node *> reprNodes, vector<Edge *> reprEdges)
     this->reprNodes = reprNodes;
     this->reprEdges = reprEdges;
     this->parent = nullptr;
+    this->wasVisited = false;
+
 }
 
 float Node::getX(){return x;}

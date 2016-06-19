@@ -10,7 +10,9 @@ Graph* BottleneckTSP::BTSPApprox(Graph *graph)
 {
     Graph* packedMbst = MBST(graph);
     Graph* unpackedMbst = unpackGraph(packedMbst);
-    return unpackedMbst;
+    Graph* standardTree = createStandardTree(unpackedMbst);
+    Graph* btspCycle = createBTSPGraph(standardTree);
+    return btspCycle;
 }
 
 Graph* BottleneckTSP::MBST(Graph* graph)
@@ -114,7 +116,9 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
     for(int i=0;i<nodeVector.size();i++)
     {
         vector<Node*> nodes;
+        nodes.push_back(nodeVector.at(i));
         edgeConnMap.insert(std::pair<Node*,vector<Node*>>(nodeVector.at(i),nodes));
+
     }
 
     //TODO (BONUS): check for lower weight value
@@ -329,6 +333,93 @@ void BottleneckTSP::unpackNodes(vector<Node *> *outNodeVector, vector<Edge *> *o
     {
         unpackNodes(outNodeVector,outEdgeVector,packedNode->reprNodes.at(i));
     }
+}
 
+Graph* BottleneckTSP::createStandardTree(Graph * inputGraph)
+{
+    Graph* outputGraph = new Graph();
+    outputGraph->size = inputGraph->nodeVector.size();
+    outputGraph->root = inputGraph->nodeVector.at(0);
+    findChildren(outputGraph->root,inputGraph);
+    return outputGraph;
+}
+
+void BottleneckTSP::findChildren(Node* node,Graph* graph)
+{
+    for(int i=0;i<graph->edgesVector.size();i++)
+    {
+        if(graph->edgesVector.at(i)->nodes.at(0) == node)
+        {
+            graph->edgesVector.at(i)->nodes.at(1)->parent = node;
+          graph->edgesVector.at(i)->nodes.at(1)->distanceToParent =
+                  graph->edgesVector.at(i)->weight;
+          node->children.push_back(graph->edgesVector.at(i)->nodes.at(1));
+          graph->edgesVector.erase(graph->edgesVector.begin()+i);
+          i--;
+        }
+        else if(graph->edgesVector.at(i)->nodes.at(1) == node)
+        {
+            graph->edgesVector.at(i)->nodes.at(0)->parent = node;
+            graph->edgesVector.at(i)->nodes.at(0)->distanceToParent =
+                    graph->edgesVector.at(i)->weight;
+          node->children.push_back(graph->edgesVector.at(i)->nodes.at(0));
+          graph->edgesVector.erase(graph->edgesVector.begin()+i);
+          i--;
+        }
+    }
+    for(int i=0;i<node->children.size();i++)
+    {
+        findChildren(node->children.at(i),graph);
+    }
+}
+
+Graph* BottleneckTSP::createBTSPGraph(Graph* mbstTree)
+{
+    vector<Node*> btspSeq;
+    btspSeq.push_back(mbstTree->root);
+    Node* currentNode = mbstTree->root;
+    currentNode->wasVisited = true;
+    int currentDistance = 0;
+    while(btspSeq.size() != mbstTree->size)
+    {
+        if(currentDistance == 3)
+        {
+            currentNode->wasVisited = true;
+            btspSeq.push_back(currentNode);
+            currentDistance = 0;
+        }
+        if(currentNode->children.size() == 0)
+        {
+            if(currentNode->wasVisited == false)
+            {
+                currentNode->wasVisited = true;
+                btspSeq.push_back(currentNode);
+                currentDistance = 0;
+            }
+            if(currentNode != mbstTree->root)
+            {
+                currentNode = currentNode->parent;
+                currentNode->children.erase(currentNode->children.begin());
+                currentDistance++;
+            }
+        }
+        else{
+            currentNode = currentNode->children.at(0);
+            currentDistance++;
+        }
+    }
+
+    Graph* btspGraph = new Graph();
+    btspGraph->nodeVector = btspSeq;
+    for(int i=0;i<btspSeq.size()-1;i++)
+    {
+        Edge* edge = new Edge(btspSeq.at(i),btspSeq.at(i+1));
+        btspGraph->edgesVector.push_back(edge);
+    }
+    btspGraph->edgesVector.push_back(new Edge(btspSeq.at(btspSeq.size()-1),btspSeq.at(0)));
+    btspGraph->isInit = true;
+
+    btspGraph->root = mbstTree->root;
+    return btspGraph;
 }
 

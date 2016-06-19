@@ -12,6 +12,8 @@
 #include <vector>
 #include <locale.h>
 #include "bottlenecktsp.h"
+#include <btsp_workshop.h>
+
 /*namespace Ui {
 class MainWindow;
 }*/
@@ -45,8 +47,18 @@ private:
     }
 
     QWidget *centralWidget;
-    QMenu *fileMenu;
+    QMenu *fileMenu;    
     QAction *openFile;
+
+    QMenu *experimentsMenu;
+    QAction *runBrutForceAction;
+    QAction *runUSASmallAction;
+    QAction *runUSAMediumAction;
+    QAction *runUSALargeAction;
+
+    QMenu *editMenu;
+    QAction *runAnimationAction;
+
     QFileDialog *fileDialog;
 
     OglWidget *oglWidget;
@@ -65,6 +77,16 @@ private:
 
 private slots:
     void openFileDialog();
+
+    void setResult(BTSPResult result, bool drawEdges = true);
+
+    void runBruteforceExperiment();
+    void runUSASmallExperiment();
+    void runUSAMediumExperiment();
+    void runUSABigExperiment();
+
+    void runAnimation();
+
 };
 
 #endif // MAINWINDOW_H

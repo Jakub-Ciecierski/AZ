@@ -4,6 +4,7 @@
 #include "Structures/graph.h"
 #include <QSet>
 #include <QKeyEvent>
+#include <QTime>
 
 class OglWidget : public QGLWidget
 {
@@ -11,8 +12,12 @@ class OglWidget : public QGLWidget
 public:
      explicit OglWidget(QWidget *parent = 0);
     ~OglWidget();
-    Graph* graph;
 
+    Graph* graph;
+    bool drawEdges;
+
+    void setRunAnimation(bool);
+    bool isRunAnimation();
 protected:
 
     void initializeGL();
@@ -29,12 +34,19 @@ protected:
 
 private:
     QSet<int> keysPressed;
-    float scale = 1.0f;
+    float scale = 0.95f;
     float xTranslation = 0.0f;
     float yTranslation = 0.0f;
     int screenWidth;
     int screenHeight;
     int timerId;
+
+    // Animation
+    bool runAnimation;
+    QTime timer;
+    int dtMS = 100;
+    int currentEdgeLimit = 0;
+
     void timerEvent(QTimerEvent *event);
     void draw();
 };
