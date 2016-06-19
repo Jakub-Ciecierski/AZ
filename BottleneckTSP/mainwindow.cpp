@@ -19,8 +19,8 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::openUSAMap(){
-    //QString path = "../resources/usa115475.tsp";
-    QString path = "../resources/mein.tsp";
+    QString path = "../resources/usa115475.tsp";
+    //QString path = "../resources/mein.tsp";
     openGraphFile(path);
 }
 
@@ -84,7 +84,7 @@ void MainWindow::openGraphFile(QString path){
        float maxY = 0;
 
        int counter =0;
-       int leap = 500;
+       int leap = 1000;
        for(int i=0;i<vectorSize;i++)
        {
            QString line = in.readLine();

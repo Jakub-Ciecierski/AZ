@@ -3,7 +3,7 @@
 
 Graph::Graph()
 {
-
+    root = nullptr;
 }
 
 //changing values to floats for drawing purpose

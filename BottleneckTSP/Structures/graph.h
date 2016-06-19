@@ -15,9 +15,12 @@ public:
     Graph(vector<Node*> &nodeVector,vector<Edge*> &edgesVector);
 
     float computeWeight(Node* firstNode, Node* secondNode);
-
+    int size;
     vector<Node*> nodeVector;
     vector<Edge*> edgesVector;
+
+    Node* root;
+
     bool isInit = false;
 };
 
