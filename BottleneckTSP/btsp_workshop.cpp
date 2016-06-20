@@ -93,6 +93,10 @@ BTSPResult BTSPWorkshop::runTest(QString path, int leap){
     BottleneckTSP btsp;
 
     Graph* originalGraph = openGraphFile(path, leap);
+    if(originalGraph == NULL){
+        return BTSPResult{NULL, NULL};
+    }
+
     Graph* resultGraph = btsp.BTSPApprox(originalGraph);
 
     BTSPResult results{originalGraph, resultGraph};
@@ -108,10 +112,13 @@ BTSPResult BTSPWorkshop::runTest(QString path, int leap){
 
 BTSPResult BTSPWorkshop::runBruteForce(){
     BottleneckTSP btsp;
-    QString path = "../resources/usa115475.tsp";
+    QString path = "../resources/usa_base_DO_NOT_USE.tsp";
     int leap = 11000; // usa, leap 11000 yeilds 10 vertices.
 
     Graph* originalGraph = openGraphFile(path, leap);
+    if(originalGraph == NULL){
+        return BTSPResult{NULL, NULL};
+    }
 
     Graph* btspAproxxGraph = btsp.BTSPApprox(originalGraph);
 
@@ -133,22 +140,27 @@ BTSPResult BTSPWorkshop::runBruteForce(){
 }
 
 BTSPResult BTSPWorkshop::runUSASmall(){
-    QString path = "../resources/usa115475.tsp";
+    QString path = "../resources/usa_base_DO_NOT_USE.tsp";
     int leap = 750;
 
     return runTest(path, leap);
 }
 
 BTSPResult BTSPWorkshop::runUSAMedium(){
-    QString path = "../resources/usa115475.tsp";
+    QString path = "../resources/usa_base_DO_NOT_USE.tsp";
     int leap = 500;
 
     return runTest(path, leap);
 }
 
 BTSPResult BTSPWorkshop::runUSABig(){
-    QString path = "../resources/usa115475.tsp";
+    QString path = "../resources/usa_base_DO_NOT_USE.tsp";
     int leap = 250;
 
+    return runTest(path, leap);
+}
+
+BTSPResult BTSPWorkshop::runCustomExperiment(QString path){
+    int leap = 1;
     return runTest(path, leap);
 }

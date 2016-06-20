@@ -28,6 +28,7 @@ public:
     BTSPResult runUSASmall();
     BTSPResult runUSAMedium();
     BTSPResult runUSABig();
+    BTSPResult runCustomExperiment(QString path);
 };
 
 #endif // BTSP_WORKSHOP_H

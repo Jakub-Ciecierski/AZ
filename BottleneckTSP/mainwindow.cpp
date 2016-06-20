@@ -71,10 +71,12 @@ void MainWindow::setupMenuBar()
 void MainWindow::openFileDialog()
 {
     setlocale(LC_ALL, "C");
-    fileDialog->show();
     QString path = fileDialog->getOpenFileName();
 
-    //openGraphFile(path);
+    BTSPWorkshop btspWorkshop;
+    BTSPResult result = btspWorkshop.runCustomExperiment(path);
+
+    setResult(result, false);
 }
 
 void MainWindow::setResult(BTSPResult result, bool drawEdges){
