@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     Structures/graph.cpp \
     Structures/node.cpp \
     Structures/edge.cpp \
-    Structures/forest.cpp
+    Structures/forest.cpp \
+    btsp_bruteforce.cpp \
+    btsp_workshop.cpp
 
 HEADERS  += mainwindow.h \
     oglwidget.h \
@@ -30,6 +32,8 @@ HEADERS  += mainwindow.h \
     Structures/graph.h \
     Structures/node.h \
     Structures/edge.h \
-    Structures/forest.h
+    Structures/forest.h \
+    btsp_bruteforce.h \
+    btsp_workshop.h
 
 FORMS    += mainwindow.ui

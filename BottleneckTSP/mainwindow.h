@@ -12,6 +12,8 @@
 #include <vector>
 #include <locale.h>
 #include "bottlenecktsp.h"
+#include <btsp_workshop.h>
+
 /*namespace Ui {
 class MainWindow;
 }*/
@@ -26,41 +28,47 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void openUSAMap();
 private:
-    std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-        std::stringstream ss(s);
-        std::string item;
-        while (std::getline(ss, item, delim)) {
-            elems.push_back(item);
-        }
-        return elems;
-    }
-
-
-    std::vector<std::string> split(const std::string &s, char delim) {
-        std::vector<std::string> elems;
-        split(s, delim, elems);
-        return elems;
-    }
 
     QWidget *centralWidget;
-    QMenu *fileMenu;
+    QMenu *fileMenu;    
     QAction *openFile;
+
+    QMenu *experimentsMenu;
+    QAction *runBrutForceAction;
+    QAction *runUSASmallAction;
+    QAction *runUSAMediumAction;
+    QAction *runUSALargeAction;
+
+    QMenu *editMenu;
+    QAction *runAnimationAction;
+
     QFileDialog *fileDialog;
+
     OglWidget *oglWidget;
+    OglWidget* oglWidget2;
+    OglWidget* oglWidget3;
+
     QVBoxLayout *mainLayout;
     QHBoxLayout *oglWidgetLayout;
 
     void setupLayout();
     void setupMenuBar();
 
-    void openGraphFile(QString path);
-
     BottleneckTSP btsp = BottleneckTSP();
 
 private slots:
     void openFileDialog();
+
+    void setResult(BTSPResult result, bool drawEdges = true);
+
+    void runBruteforceExperiment();
+    void runUSASmallExperiment();
+    void runUSAMediumExperiment();
+    void runUSABigExperiment();
+
+    void runAnimation();
+
 };
 
 #endif // MAINWINDOW_H

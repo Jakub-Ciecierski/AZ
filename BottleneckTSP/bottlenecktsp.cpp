@@ -10,10 +10,8 @@ Graph* BottleneckTSP::BTSPApprox(Graph *graph)
 {
     Graph* packedMbst = MBST(graph);
     Graph* unpackedMbst = unpackGraph(packedMbst);
-    float bottleneck = unpackedMbst->getBottleneck();
     Graph* standardTree = createStandardTree(unpackedMbst);
     Graph* btspCycle = createBTSPGraph(standardTree);
-    bottleneck = btspCycle->getBottleneck();
     return btspCycle;
 }
 
@@ -78,14 +76,14 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
             forest->componentNodes.at(i).at(j)->parent = node;
         }
     }
-    
-    
+
+
     //TODO: check for null parent (assing null to parent)
 
     for(int i=0;i<allNodes->size();i++)
     {
         //bool isNotInclued = true;
-        
+
         if(allNodes->at(i)->parent == nullptr)
         {
             nodeVector.push_back(allNodes->at(i));
@@ -103,7 +101,7 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
             }
             if(!isNotInclued)break;
         }*/
-        
+
        /* if(isNotInclued)
         {
 
@@ -420,6 +418,8 @@ Graph* BottleneckTSP::createBTSPGraph(Graph* mbstTree)
     }
     btspGraph->edgesVector.push_back(new Edge(btspSeq.at(btspSeq.size()-1),btspSeq.at(0)));
     btspGraph->isInit = true;
+
+    btspGraph->root = mbstTree->root;
     return btspGraph;
 }
 
