@@ -4,6 +4,7 @@
 #include <sstream>
 #include <QFile>
 #include "bottlenecktsp.h"
+#include <btsp_bruteforce.h>
 
 BTSPWorkshop::BTSPWorkshop(){
 
@@ -114,10 +115,32 @@ BTSPResult BTSPWorkshop::runTest(QString path, int leap){
 }
 
 BTSPResult BTSPWorkshop::runBruteForce(){
-    QString path = "../resources/mein.tsp";
-    int leap = 1;
+    BottleneckTSP btsp;
+    QString path = "../resources/usa115475.tsp";
+    int leap = 11000; // usa, leap 11000 yeilds 10 vertices.
 
-    return runTest(path, leap);
+    Graph* originalGraph = openGraphFile(path, leap);
+
+    Graph* btspAproxxGraph = btsp.BTSPApprox(originalGraph);
+
+    BTSPBruteforce btspBruteforce(originalGraph);
+    Graph* bruteforceGraph = btspBruteforce.solve(0);
+
+    BTSPResult results{btspAproxxGraph, bruteforceGraph};
+
+    float approxBottlneck = btspAproxxGraph->getBottleneck();
+    float bruteBottlneck = bruteforceGraph->getBottleneck();
+
+    float approxSumOfWeights = btspAproxxGraph->calculateSumOfWeights();
+    float bruteSumOfWeights = bruteforceGraph->calculateSumOfWeights();
+
+    std::cout << "Approx Bottleneck: " << approxBottlneck << std::endl;
+    std::cout << "Approx Sum Of Weights: " << approxSumOfWeights << std::endl;
+
+    std::cout << "Bruteforce Bottleneck: " << bruteBottlneck << std::endl;
+    std::cout << "Bruteforce Sum Of Weights: " << bruteSumOfWeights << std::endl;
+
+    return results;
 }
 
 BTSPResult BTSPWorkshop::runUSASmall(){

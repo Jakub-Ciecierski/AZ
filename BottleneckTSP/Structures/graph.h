@@ -16,6 +16,8 @@ public:
 
     float computeWeight(Node* firstNode, Node* secondNode);
     float getBottleneck();
+    float calculateSumOfWeights();
+
     int size;
 
     vector<Node*> nodeVector;

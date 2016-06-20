@@ -9,6 +9,8 @@ Graph::Graph()
 //changing values to floats for drawing purpose
 Graph::Graph(vector<Node*> *nodeVector, float minX, float maxX, float minY, float maxY)
 {
+    root = nullptr;
+
     isInit = true;
     float divisor;
     if((maxX-minX)>(maxY-minY)) divisor = maxX - minX;
@@ -82,4 +84,13 @@ float Graph::getBottleneck()
         }
     }
     return max;
+}
+
+float Graph::calculateSumOfWeights(){
+    float sumOfWeights = 0;
+    for(int i=0;i<edgesVector.size();i++)
+    {
+        sumOfWeights += edgesVector[i]->weight;
+    }
+    return sumOfWeights;
 }
