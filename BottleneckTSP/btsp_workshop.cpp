@@ -148,7 +148,7 @@ BTSPResult BTSPWorkshop::runUSAMedium(){
 
 BTSPResult BTSPWorkshop::runUSABig(){
     QString path = "../resources/usa115475.tsp";
-    int leap = 250;
+    int leap = 50;
 
     return runTest(path, leap);
 }

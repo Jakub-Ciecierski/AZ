@@ -71,10 +71,7 @@ void MainWindow::setupMenuBar()
 void MainWindow::openFileDialog()
 {
     setlocale(LC_ALL, "C");
-    fileDialog->show();
     QString path = fileDialog->getOpenFileName();
-
-    //openGraphFile(path);
 }
 
 void MainWindow::setResult(BTSPResult result, bool drawEdges){

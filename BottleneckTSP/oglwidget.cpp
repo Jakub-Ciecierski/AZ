@@ -122,8 +122,6 @@ void OglWidget::draw()
     mat4 transMat;
     transMat = glm::scale(transMat,vec3(scale));
     transMat = glm::translate(transMat,vec3(xTranslation,yTranslation,0.0));
-    //vec3 scalingFactor = glm::vec3(scale);
-
 
     for(int i=0;i<graph->nodeVector.size();i++)
     {

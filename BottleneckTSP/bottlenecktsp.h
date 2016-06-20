@@ -38,18 +38,7 @@ private:
 
     Forest* createForest(vector<Edge*> *edgeVector, int graphSize);
 
-    float computeMedianWeight(Graph* graph);
     float computeMedianSTD(Graph* graph);
-
-    float findMedian(float *v, int n, int k);
-    float findMedian(float *v, int size);
-
-    //////HELPER FUNCTIONS/////
-
-    vector<Edge*>* biggerThanMedian(vector<Edge*> *edgeVector,
-                                    float median);
-    vector<Edge*>* smallerOrEqualThanMedian(vector<Edge*> *edgeVector,
-                                     float median);
 
     void divideEdgesByMedian(vector<Edge*> *edgeVector,
                              float median,vector<Edge*> *vectorA,vector<Edge*> *vectorB);

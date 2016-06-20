@@ -6,34 +6,10 @@ Forest::Forest()
 }
 Forest::Forest(vector<Edge *> *edgeVector, int graphSize)
 {
-
-    //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111111
-    /// TRZYMAĆ KRAWĘDZIE POSORTOWANE I JEŻELI JAKAŚ NOWA KRAWĘDŹ SPOWODOWAŁABY POWSTANIE CYKLU TO MUSIMY WYWALIĆ TĄ Z NAJWIĘKSZĄ WAGĄ
-    /// UBER TMP!!!!!!1
-    ///
-
-    /*for(int i=0;i<edgeVector->size();i++)
-    {
-        for(int j=0;j<edgeVector->size()-1;j++)
-        {
-            if(edgeVector->at(j)->weight > edgeVector->at(j+1)->weight)
-            {
-                Edge* tmp = edgeVector->at(j);
-                edgeVector->at(j) = edgeVector->at(j+1);
-                edgeVector->at(j+1) = tmp;
-            }
-        }
-    }*/
-
     ///while preventing cycles in graph we may remove some edges.
     ///Edges not removed from initial set are stored in tmpEdgeVector which will be assigned to initial vector
     vector<Edge*> tmpEdgeVector;
 
-   /* for(int i=0;i<edgeVector->size();i++)
-    {
-        cout<<edgeVector->at(i)->nodes[0]<<endl;
-        cout<<edgeVector->at(i)->nodes[1]<<endl;
-    }*/
     //try to add each edge to a forest
     for(int i=0;i<edgeVector->size();i++)
     {
@@ -44,34 +20,24 @@ Forest::Forest(vector<Edge *> *edgeVector, int graphSize)
         int firstNodeInComp = -1;
         int secondNodeInComp = -1;
 
-        for(int j=0;j<componentNodes.size();j++)
-        {
-            for(int k=0;k<componentNodes.at(j).size();k++)
-            {
-                if(componentNodes.at(j).at(k) == edgeVector->at(i)->nodes[0])
-                {
-                    firstNodeInComp = j;
-                }
-                else if(componentNodes.at(j).at(k) == edgeVector->at(i)->nodes[1])
-                {
-                    secondNodeInComp = j;
-                }
-            }
-        }
+        firstNodeInComp = edgeVector->at(i)->nodes[0]->compNum;
+        secondNodeInComp = edgeVector->at(i)->nodes[1]->compNum;
+
         //add edge only to component containing second node
         if(firstNodeInComp == -1 && secondNodeInComp != -1)
         {
             componentEdges.at(secondNodeInComp).push_back(edgeVector->at(i));
             componentNodes.at(secondNodeInComp).push_back(edgeVector->at(i)->nodes[0]);
-            //componentNodes.at(secondNodeInComp).push_back(edgeVector->at(i)->nodes[1]);
+            edgeVector->at(i)->nodes[0]->compNum = secondNodeInComp;
             tmpEdgeVector.push_back(edgeVector->at(i));
         }
         //add edge only to component containing first node
         else if(firstNodeInComp != -1 && secondNodeInComp == -1)
         {
             componentEdges.at(firstNodeInComp).push_back(edgeVector->at(i));
-            //componentNodes.at(firstNodeInComp).push_back(edgeVector->at(i)->nodes[0]);
             componentNodes.at(firstNodeInComp).push_back(edgeVector->at(i)->nodes[1]);
+            edgeVector->at(i)->nodes[1]->compNum = firstNodeInComp;
+
             tmpEdgeVector.push_back(edgeVector->at(i));
         }
         else if(firstNodeInComp != -1 && secondNodeInComp != -1)
@@ -89,12 +55,13 @@ Forest::Forest(vector<Edge *> *edgeVector, int graphSize)
                 for(int j=0;j<componentNodes.at(firstNodeInComp).size();j++)
                 {
                     componentNodes.at(secondNodeInComp).push_back(componentNodes.at(firstNodeInComp).at(j));
+                    componentNodes.at(firstNodeInComp).at(j)->compNum = secondNodeInComp;
                 }
                 //adding current checked edge to merged component
                 componentEdges.at(secondNodeInComp).push_back(edgeVector->at(i));
 
-                componentEdges.erase(componentEdges.begin()+firstNodeInComp);
-                componentNodes.erase(componentNodes.begin()+firstNodeInComp);
+                componentEdges.at(firstNodeInComp).clear();
+                componentNodes.at(firstNodeInComp).clear();
 
                 tmpEdgeVector.push_back(edgeVector->at(i));
             }
@@ -109,9 +76,20 @@ Forest::Forest(vector<Edge *> *edgeVector, int graphSize)
             vector<Node*> newComponentNodes;
             newComponentNodes.push_back(edgeVector->at(i)->nodes[0]);
             newComponentNodes.push_back(edgeVector->at(i)->nodes[1]);
+            edgeVector->at(i)->nodes[0]->compNum = newComponentIndex;
+            edgeVector->at(i)->nodes[1]->compNum = newComponentIndex;
 
             componentEdges.push_back(newComponentEdges);
             componentNodes.push_back(newComponentNodes);
+        }
+    }
+    for(int i =0; i<componentNodes.size();i++)
+    {
+        if(componentNodes.at(i).size() == 0)
+        {
+            componentNodes.erase(componentNodes.begin()+i);
+            componentEdges.erase(componentEdges.begin()+i);
+            i--;
         }
     }
     if(graphSize != componentNodes.at(0).size())
@@ -119,8 +97,15 @@ Forest::Forest(vector<Edge *> *edgeVector, int graphSize)
     edgeVector->clear();
     for(int i=0;i<tmpEdgeVector.size();i++)edgeVector->push_back(tmpEdgeVector.at(i));
     }
-    /*edgeVector->clear();
-    for(int i=0;i<tmpEdgeVector.size();i++)edgeVector->push_back(tmpEdgeVector.at(i));*/
     this->size = componentEdges.size();
     this->spannedNodes = componentNodes.at(0).size();
+
+    ///reset compNum
+    for(int i=0; i< componentNodes.size();i++)
+    {
+        for(int j=0;j<componentNodes.at(i).size();j++)
+        {
+            componentNodes.at(i).at(j)->compNum = -1;
+        }
+    }
 }
