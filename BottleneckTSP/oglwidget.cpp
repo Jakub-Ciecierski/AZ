@@ -188,6 +188,7 @@ void OglWidget::drawGraphInfo(Graph* graph, float yStart){
 
 void OglWidget::drawInfo(){
     std:vector<std::string> infos;
+    infos.push_back("File->Open File");
     infos.push_back("Run->Experiment_X");
     infos.push_back("Edit->Animation on/off");
     infos.push_back("Green dots: Cities");

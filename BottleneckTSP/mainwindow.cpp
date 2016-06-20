@@ -72,6 +72,11 @@ void MainWindow::openFileDialog()
 {
     setlocale(LC_ALL, "C");
     QString path = fileDialog->getOpenFileName();
+
+    BTSPWorkshop btspWorkshop;
+    BTSPResult result = btspWorkshop.runCustomExperiment(path);
+
+    setResult(result, false);
 }
 
 void MainWindow::setResult(BTSPResult result, bool drawEdges){
