@@ -27,19 +27,6 @@ Graph* BottleneckTSP::MBST(Graph* graph)
         return graph;
     }
 
-    /*if(graph->edgesVector.size() == graph->nodeVector.size()-1)
-    {
-        return graph;
-    }*/
-
-    /*for(int i=0;i<graph->nodeVector->size();i++)
-    {
-        if(graph->nodeVector->at(i) == NULL)
-        {
-            printf("null/n");
-        }
-    }*/
-
     float median = computeMedianSTD(graph);
 
     vector<Edge*> vectorA, vectorB ;
@@ -54,7 +41,6 @@ Graph* BottleneckTSP::MBST(Graph* graph)
 
     Forest* forest = createForest(&vectorB, graph->nodeVector.size());
 
-    //TODO: dealocate memory
     if(forest->size == 1 && forest->spannedNodes == graph->nodeVector.size())
     {
         Graph* graphPrime = new Graph(&(graph->nodeVector),&vectorB);
@@ -83,35 +69,12 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
         }
     }
 
-
-    //TODO: check for null parent (assing null to parent)
-
     for(int i=0;i<allNodes->size();i++)
     {
-        //bool isNotInclued = true;
-
         if(allNodes->at(i)->parent == nullptr)
         {
             nodeVector.push_back(allNodes->at(i));
         }
-
-        /*for(int j=0;j<forest->size;j++)
-        {
-            for(int k=0;k<forest->componentNodes.at(j).size();k++)
-            {
-                if(forest->componentNodes.at(j).at(k) == allNodes->at(i))
-                {
-                    isNotInclued = false;
-                    break;
-                }
-            }
-            if(!isNotInclued)break;
-        }*/
-
-       /* if(isNotInclued)
-        {
-
-        }*/
     }
     /// for each node check if the edge was already added to to the set of contracted edges. If edge is connecting at least
     /// one component node than we have to move pointers from nodeVector to realNodesVector and change pointers in nodeVector
@@ -163,7 +126,6 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
             edge->parent = edges->at(i);
             edgeVector.push_back(edge);
         }
-
     }
     return new Graph(nodeVector,edgeVector);
 
@@ -172,19 +134,6 @@ Graph* BottleneckTSP::MBSTContract(Forest *forest, vector<Edge *> *edges, vector
 Forest* BottleneckTSP::createForest(vector<Edge *> *edgeVector, int graphSize)
 {
     return new Forest(edgeVector,graphSize);
-}
-
-
-float BottleneckTSP::computeMedianWeight(Graph *graph)
-{
-    float* weights = new float[graph->edgesVector.size()];
-    for(int i=0;i<graph->edgesVector.size();i++)
-    {
-        weights[i] = graph->edgesVector.at(i)->weight;
-    }
-    //TODO: fix findMedian with proper complexity
-    //return findMedian(weights,graph->edgesVector->size(),0);
-    return findMedian(weights,graph->edgesVector.size());
 }
 
 float BottleneckTSP::computeMedianSTD(Graph* graph){
@@ -208,97 +157,6 @@ float BottleneckTSP::computeMedianSTD(Graph* graph){
         median = weights[size/2];
     }
     return median;
-}
-
-float BottleneckTSP::findMedian(float *v, int size)
-{
-    for(int i=0;i<size;i++)
-    {
-        for(int j=0;j<size-1;j++)
-        {
-            if(v[j]<v[j+1])
-            {
-                float tmp = v[j];
-                v[j] = v[j+1];
-                v[j+1] = tmp;
-            }
-        }
-    }
-    int index = size/2;
-    if(size%2 == 0)
-    {
-     //   int index2 = index+1;
-        return (v[index--]+v[index])/2;
-    }
-    else{
-        return v[index];
-    }
-}
-
-//TODO: FIX THIS FUNCTION
-float BottleneckTSP::findMedian(float *v, int n, int k)
-{
-   // int find_kth(int *v, int n, int k) {
-        if (n == 1 && k == 0) return v[0];
-
-        int m = (n + 4)/5;
-        float *weights = new float[m];
-        for (int i=0; i<m; i++) {
-            if (5*i + 4 < n) {
-                float *w = v + 5*i;
-                for (int j0=0; j0<3; j0++) {
-                    int jmin = j0;
-                    for (int j=j0+1; j<5; j++) {
-                        if (w[j] < w[jmin]) jmin = j;
-                    }
-                    swap(w[j0], w[jmin]);
-                }
-                weights[i] = w[2];
-            } else {
-                weights[i] = v[5*i];
-            }
-        }
-
-        float pivot = findMedian(weights, m, m/2);
-        delete [] weights;
-
-        for (int i=0; i<n; i++) {
-            if (v[i] == pivot) {
-                swap(v[i], v[n-1]);
-                break;
-            }
-        }
-
-        int store = 0;
-        for (int i=0; i<n-1; i++) {
-            if (v[i] < pivot) {
-                swap(v[i], v[store++]);
-            }
-        }
-        swap(v[store], v[n-1]);
-
-        if (store == k) {
-            return pivot;
-        } else if (store > k) {
-            return findMedian(v, store, k);
-        } else {
-            return findMedian(v+store+1, n-store-1, k-store-1);
-        }
-
-}
-
-vector<Edge*>* BottleneckTSP::biggerThanMedian(vector<Edge *> *edgeVector,
-                                               float median)
-{
-
-
-}
-
-vector<Edge*>* BottleneckTSP::smallerOrEqualThanMedian(vector<Edge *> *edgeVector,
-                                               float median)
-{
-
-
 }
 
 ///Divide edges into two sets. Set B contains edges with weights smaller and equal than median,

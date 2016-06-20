@@ -24,7 +24,6 @@ Graph::Graph(vector<Node*> *nodeVector, float minX, float maxX, float minY, floa
         nodeVector->at(i)->setX(((nodeVector->at(i)->getX()-minX)/divisor*2.f)-1.f);
         nodeVector->at(i)->setY(((nodeVector->at(i)->getY()-minY)/divisor*2.f)-1.f);
     }
-    //TMP
     int size = 0;
 
     for(int i=0;i<nodeVector->size()-1;i++)

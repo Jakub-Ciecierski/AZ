@@ -10,9 +10,6 @@ public:
     Node();
     Node(float x, float y);
     Node(vector<Node*> reprNodes,vector<Edge*> reprEdges);
-
-    // vector<Node*> nodeVector;
-
     /// vectors storing pointers to nodes and edges
     /// represented by this node after MTSB-Contract. Should be null if its normal node
     Node* parent;
@@ -22,6 +19,8 @@ public:
 
     vector<Node*> reprNodes;
     vector<Edge*> reprEdges;
+
+    int compNum;
 
     float getX();
     void setX(float x);

@@ -183,6 +183,7 @@ BTSPResult BTSPWorkshop::runUSAMedium(){
 }
 
 BTSPResult BTSPWorkshop::runUSABig(){
+
     QString path = "../resources/usa_base_DO_NOT_USE.tsp";
     int leap = 250;
 

@@ -2,8 +2,9 @@
 
 Node::Node()
 {
-   this->parent = nullptr;
-   this->wasVisited = false;
+    this->parent = nullptr;
+    this->wasVisited = false;
+    this->compNum = -1;
 }
 Node::Node(float x, float y)
 {
@@ -11,6 +12,7 @@ Node::Node(float x, float y)
     this->y = y;
     this->parent = nullptr;
     this->wasVisited = false;
+    this->compNum = -1;
 }
 
 Node::Node(vector<Node *> reprNodes, vector<Edge *> reprEdges)
@@ -19,7 +21,7 @@ Node::Node(vector<Node *> reprNodes, vector<Edge *> reprEdges)
     this->reprEdges = reprEdges;
     this->parent = nullptr;
     this->wasVisited = false;
-
+    this->compNum = -1;
 }
 
 float Node::getX(){return x;}
