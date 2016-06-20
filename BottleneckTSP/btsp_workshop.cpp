@@ -134,21 +134,22 @@ BTSPResult BTSPWorkshop::runBruteForce(){
 
 BTSPResult BTSPWorkshop::runUSASmall(){
     QString path = "../resources/usa115475.tsp";
-    int leap = 1000;
+    int leap = 750;
 
     return runTest(path, leap);
 }
 
 BTSPResult BTSPWorkshop::runUSAMedium(){
     QString path = "../resources/usa115475.tsp";
-    int leap = 750;
+    int leap = 500;
 
     return runTest(path, leap);
 }
 
 BTSPResult BTSPWorkshop::runUSABig(){
     QString path = "../resources/usa115475.tsp";
-    int leap = 400;
+    //int leap = 400;
+    int leap = 250;
 
     return runTest(path, leap);
 }
