@@ -109,7 +109,7 @@ void OglWidget::draw()
     glEnable(GL_BLEND);
     glBlendEquation(GL_MAX);
 
-    float nodeSize = 4.0f;
+    float nodeSize = 3.0f;
     float rootSize = 6.0f;
 
     float mapColor[4] = {0.0f, 0.7f, 0.0f, 1.0f};
@@ -169,6 +169,7 @@ void OglWidget::draw()
             glEnd();
         }
     }
+
     drawGraphInfo(this->graph, -0.75);
 }
 
