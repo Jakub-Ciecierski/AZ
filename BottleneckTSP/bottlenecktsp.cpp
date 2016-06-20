@@ -1,6 +1,9 @@
 #include "bottlenecktsp.h"
 #include <map>
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
 
 BottleneckTSP::BottleneckTSP()
 {
@@ -37,9 +40,7 @@ Graph* BottleneckTSP::MBST(Graph* graph)
         }
     }*/
 
-    float median = computeMedianWeight(graph);
-    std::cout << "Median:" << median << std::endl;
-    std::cout << std::endl;
+    float median = computeMedianSTD(graph);
 
     vector<Edge*> vectorA, vectorB ;
     divideEdgesByMedian(&(graph->edgesVector),median,&vectorA,&vectorB);
@@ -184,6 +185,29 @@ float BottleneckTSP::computeMedianWeight(Graph *graph)
     //TODO: fix findMedian with proper complexity
     //return findMedian(weights,graph->edgesVector->size(),0);
     return findMedian(weights,graph->edgesVector.size());
+}
+
+float BottleneckTSP::computeMedianSTD(Graph* graph){
+    int size = graph->edgesVector.size();
+
+    std::vector<float> weights(size);
+    for(int i=0; i < size ;i++)
+    {
+        weights[i] = graph->edgesVector.at(i)->weight;
+    }
+
+    std::nth_element(weights.begin(), weights.begin() + weights.size()/2, weights.end());
+
+    float median = 0;
+    if(size % 2 == 0){
+        int index = size/2;
+        median += weights[index];
+        median += weights[index - 1];
+        median /= 2;
+    }else{
+        median = weights[size/2];
+    }
+    return median;
 }
 
 float BottleneckTSP::findMedian(float *v, int size)

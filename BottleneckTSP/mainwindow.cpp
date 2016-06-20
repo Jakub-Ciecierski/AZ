@@ -17,7 +17,6 @@ MainWindow::~MainWindow()
 
     delete oglWidget;
     delete oglWidget2;
-    delete oglWidget3;
 }
 
 void MainWindow::setupLayout()
@@ -26,12 +25,12 @@ void MainWindow::setupLayout()
     oglWidgetLayout = new QHBoxLayout;
 
     oglWidget = new OglWidget();
+    oglWidget->isDrawInfo = true;
+
     oglWidget2 = new OglWidget();
-    oglWidget3 = new OglWidget();
 
     oglWidgetLayout->addWidget(oglWidget);
     oglWidgetLayout->addWidget(oglWidget2);
-    //oglWidgetLayout->addWidget(oglWidget3);
 
     mainLayout->addLayout(oglWidgetLayout);
 
@@ -57,6 +56,7 @@ void MainWindow::setupMenuBar()
     experimentsMenu->addAction(runUSASmallAction);
     experimentsMenu->addAction(runUSAMediumAction);
     experimentsMenu->addAction(runUSALargeAction);
+
     connect(runBrutForceAction,SIGNAL(triggered(bool)),this,SLOT(runBruteforceExperiment()));
     connect(runUSASmallAction,SIGNAL(triggered(bool)),this,SLOT(runUSASmallExperiment()));
     connect(runUSAMediumAction,SIGNAL(triggered(bool)),this,SLOT(runUSAMediumExperiment()));
