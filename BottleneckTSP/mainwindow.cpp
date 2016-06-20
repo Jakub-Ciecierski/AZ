@@ -56,6 +56,7 @@ void MainWindow::setupMenuBar()
     experimentsMenu->addAction(runUSASmallAction);
     experimentsMenu->addAction(runUSAMediumAction);
     experimentsMenu->addAction(runUSALargeAction);
+
     connect(runBrutForceAction,SIGNAL(triggered(bool)),this,SLOT(runBruteforceExperiment()));
     connect(runUSASmallAction,SIGNAL(triggered(bool)),this,SLOT(runUSASmallExperiment()));
     connect(runUSAMediumAction,SIGNAL(triggered(bool)),this,SLOT(runUSAMediumExperiment()));
