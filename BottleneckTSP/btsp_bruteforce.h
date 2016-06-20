@@ -3,6 +3,11 @@
 
 #include "Structures/graph.h"
 
+/**
+ * Solves BTSP problem with Bruteforce.
+ * Finds all permutations representing hamiltonian cycles.
+ * Chooses the one with least heaviest weight edge.
+ * */
 class BTSPBruteforce
 {
 private:
@@ -10,13 +15,20 @@ private:
 
     int count;
 
+    std::vector<vector<int>> getAllSequences(int rootIndex, int count);
     void rotate(int vec[], int size);
     int permutate(int *start, int size);
+
+    vector<int> getLeastBottleneckSequence(vector<vector<int>>& sequences);
+    float calculateBottleneck(vector<int>& seq);
+    float calculateWeight(Node* n1, Node* n2);
+
+    Graph* constructGraph(vector<int>& sequence);
 
 public:
     BTSPBruteforce(Graph* graph);
 
-    void solve(int rootIndex);
+    Graph*  solve(int rootIndex);
 
 };
 

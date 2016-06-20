@@ -1,5 +1,7 @@
 #include "bottlenecktsp.h"
 #include <map>
+#include <iostream>
+
 BottleneckTSP::BottleneckTSP()
 {
 
@@ -36,6 +38,9 @@ Graph* BottleneckTSP::MBST(Graph* graph)
     }*/
 
     float median = computeMedianWeight(graph);
+    std::cout << "Median:" << median << std::endl;
+    std::cout << std::endl;
+
     vector<Edge*> vectorA, vectorB ;
     divideEdgesByMedian(&(graph->edgesVector),median,&vectorA,&vectorB);
 
