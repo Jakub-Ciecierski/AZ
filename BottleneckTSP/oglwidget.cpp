@@ -20,6 +20,8 @@ OglWidget::OglWidget(QWidget *parent):
     runAnimation = false;
 
     timer.start();
+
+    isDrawInfo = false;
 }
 
 OglWidget::~OglWidget()
@@ -100,6 +102,8 @@ void OglWidget::timerEvent(QTimerEvent *event)
 
 void OglWidget::draw()
 {
+    if(isDrawInfo)
+        drawInfo();
     if(graph == NULL) return;
 
     glEnable(GL_BLEND);
@@ -147,7 +151,7 @@ void OglWidget::draw()
             if(graph->bottleneckIndex == i){
                 glColor4f(bottleneckColor[0], bottleneckColor[1],
                         bottleneckColor[2], bottleneckColor[3]);
-                glLineWidth(0.9f);
+                glLineWidth(1.5f);
             }else{
                 glColor4f(edgesColor[0], edgesColor[1],
                         edgesColor[2], edgesColor[3]);
@@ -167,8 +171,60 @@ void OglWidget::draw()
             glEnd();
         }
     }
+    drawGraphInfo(this->graph, -0.75);
 }
 
+void OglWidget::drawGraphInfo(Graph* graph, float yStart){
+    std::vector<string> infos = graph->toString();
+    float x,y,z;
+    x = -1;
+    y = yStart;
+    z = 0;
+    float dt = 0.05;
+    for(unsigned int i = 0; i < infos.size(); i++){
+        drawText(x,y,z, QString::fromStdString(infos[i]));
+        y -= dt;
+
+    }
+}
+
+void OglWidget::drawInfo(){
+    std:vector<std::string> infos;
+    infos.push_back("Run->Experiment_X");
+    infos.push_back("Edit->Animation on/off");
+    infos.push_back("Green dots: Cities");
+
+    infos.push_back("Red dot: Root");
+    infos.push_back("Thin (Brownish) Edges: Edges");
+    infos.push_back("Thick (Yelloish) Edge: Bottleneck");
+    infos.push_back("Edges are omitted in original full graph");
+
+    float x,y,z;
+    x = -1.0;
+    y = 0.95f;
+    z = 0;
+    float dt = 0.05;
+    for(unsigned int i = 0; i < infos.size(); i++){
+        drawText(x,y,z, QString::fromStdString(infos[i]));
+        y -= dt;
+    }
+}
+
+void OglWidget::drawText(double x, double y, double z, QString txt) {
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
+
+    float fontSize = 15;
+    float maxScreenHeight = 1250;
+    float fact = screenHeight / maxScreenHeight;
+    fontSize *= fact;
+
+    qglColor(Qt::green);
+    renderText(x, y, z, txt, QFont("Sans Serif", fontSize, QFont::ExtraLight, false) );
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+}
 
 void OglWidget::keyPressEvent(QKeyEvent *event)
 {
@@ -198,3 +254,4 @@ void OglWidget::keyReleaseEvent(QKeyEvent *event)
 {
     keysPressed-= event->key();
 }
+

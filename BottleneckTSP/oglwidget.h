@@ -18,6 +18,8 @@ public:
 
     void setRunAnimation(bool);
     bool isRunAnimation();
+
+    bool isDrawInfo;
 protected:
 
     void initializeGL();
@@ -49,6 +51,10 @@ private:
 
     void timerEvent(QTimerEvent *event);
     void draw();
+
+    void drawGraphInfo(Graph* graph, float yStart = -0.65);
+    void drawInfo();
+    void drawText(double x, double y, double z, QString txt);
 };
 
 #endif // OGLWIDGET_H

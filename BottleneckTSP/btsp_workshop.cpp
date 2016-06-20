@@ -96,20 +96,12 @@ BTSPResult BTSPWorkshop::runTest(QString path, int leap){
     Graph* resultGraph = btsp.BTSPApprox(originalGraph);
 
     BTSPResult results{originalGraph, resultGraph};
-    resultGraph->getBottleneck();
 
-    float sumOfWeights = 0;
-    float bottleneck = 0;
-    for(int i = 0; i < resultGraph->edgesVector.size(); i++){
-        Edge* edge = resultGraph->edgesVector[i];
-        sumOfWeights += edge->weight;
-        if(edge->weight > bottleneck){
-            bottleneck = edge->weight;
-            resultGraph->bottleneckIndex = i;
-        }
-    }
-    std::cout << "Sum Of Weight: " << sumOfWeights << std::endl;
-    std::cout << "Bottleneck: " << bottleneck << std::endl;
+    resultGraph->getBottleneck();
+    resultGraph->calculateSumOfWeights();
+
+    resultGraph->name = "BTSP Approx";
+    originalGraph->name = "Original USA";
 
     return results;
 }
@@ -134,11 +126,8 @@ BTSPResult BTSPWorkshop::runBruteForce(){
     float approxSumOfWeights = btspAproxxGraph->calculateSumOfWeights();
     float bruteSumOfWeights = bruteforceGraph->calculateSumOfWeights();
 
-    std::cout << "Approx Bottleneck: " << approxBottlneck << std::endl;
-    std::cout << "Approx Sum Of Weights: " << approxSumOfWeights << std::endl;
-
-    std::cout << "Bruteforce Bottleneck: " << bruteBottlneck << std::endl;
-    std::cout << "Bruteforce Sum Of Weights: " << bruteSumOfWeights << std::endl;
+    btspAproxxGraph ->name = "BTSP Approx";
+    bruteforceGraph->name = "BTSP Bruteforce";
 
     return results;
 }

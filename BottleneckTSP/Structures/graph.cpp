@@ -4,6 +4,8 @@
 Graph::Graph()
 {
     root = nullptr;
+    sumOfWeights = 0;
+    bottleneckWeight = 0;
 }
 
 //changing values to floats for drawing purpose
@@ -45,6 +47,9 @@ Graph::Graph(vector<Node*> *nodeVector, float minX, float maxX, float minY, floa
             num++;
         }
     }
+
+    sumOfWeights = 0;
+    bottleneckWeight = 0;
 }
 
 Graph::Graph(vector<Node *> *nodeVector, vector<Edge *> *edgesVector)
@@ -83,6 +88,7 @@ float Graph::getBottleneck()
             max = edgesVector.at(i)->weight;
         }
     }
+    bottleneckWeight = max;
     return max;
 }
 
@@ -92,5 +98,18 @@ float Graph::calculateSumOfWeights(){
     {
         sumOfWeights += edgesVector[i]->weight;
     }
+    this->sumOfWeights = sumOfWeights;
     return sumOfWeights;
+}
+
+
+std::vector<string> Graph::toString(){
+    vector<string> infos;
+    infos.push_back("Name:              " + name);
+    infos.push_back("Vertices:          " + std::to_string(this->nodeVector.size()));
+    infos.push_back("Edges:             " + std::to_string(this->edgesVector.size()));
+    infos.push_back("Sum of Weights:    " + std::to_string(sumOfWeights));
+    infos.push_back("Bottleneck Weight: " + std::to_string(bottleneckWeight));
+
+    return infos;
 }

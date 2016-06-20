@@ -17,7 +17,6 @@ MainWindow::~MainWindow()
 
     delete oglWidget;
     delete oglWidget2;
-    delete oglWidget3;
 }
 
 void MainWindow::setupLayout()
@@ -26,12 +25,12 @@ void MainWindow::setupLayout()
     oglWidgetLayout = new QHBoxLayout;
 
     oglWidget = new OglWidget();
+    oglWidget->isDrawInfo = true;
+
     oglWidget2 = new OglWidget();
-    oglWidget3 = new OglWidget();
 
     oglWidgetLayout->addWidget(oglWidget);
     oglWidgetLayout->addWidget(oglWidget2);
-    //oglWidgetLayout->addWidget(oglWidget3);
 
     mainLayout->addLayout(oglWidgetLayout);
 

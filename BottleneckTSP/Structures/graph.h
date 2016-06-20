@@ -3,6 +3,7 @@
 #include "Structures/node.h"
 #include "Structures/edge.h"
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -18,6 +19,8 @@ public:
     float getBottleneck();
     float calculateSumOfWeights();
 
+    std::vector<string>  toString();
+
     int size;
 
     vector<Node*> nodeVector;
@@ -26,8 +29,12 @@ public:
     Node* root;
 
     int bottleneckIndex;
+    float sumOfWeights;
+    float bottleneckWeight;
 
     bool isInit = false;
+
+    std::string name;
 };
 
 #endif // GRAPH_H
