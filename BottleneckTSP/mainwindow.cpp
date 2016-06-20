@@ -42,9 +42,14 @@ void MainWindow::setupLayout()
 void MainWindow::setupMenuBar()
 {
     fileMenu = menuBar()->addMenu("File");
-    openFile = new QAction(tr("Open file"),this);
+    openFile = new QAction(tr("Open file for Approximation"),this);
+    openBruteFile = new QAction(tr("Open file for Bruteforce"),this);
+
     connect(openFile,SIGNAL(triggered(bool)),this,SLOT(openFileDialog()));
+    connect(openBruteFile,SIGNAL(triggered(bool)),this,SLOT(openFileBruteForceDialog()));
+
     fileMenu->addAction(openFile);
+    fileMenu->addAction(openBruteFile);
 
     experimentsMenu = menuBar()->addMenu("Run");
     runBrutForceAction = new QAction(tr("Run BruteForce"),this);
@@ -77,6 +82,16 @@ void MainWindow::openFileDialog()
     BTSPResult result = btspWorkshop.runCustomExperiment(path);
 
     setResult(result, false);
+}
+
+void MainWindow::openFileBruteForceDialog(){
+    setlocale(LC_ALL, "C");
+    QString path = fileDialog->getOpenFileName();
+
+    BTSPWorkshop btspWorkshop;
+    BTSPResult result = btspWorkshop.runBruteForce(path);
+
+    setResult(result, true);
 }
 
 void MainWindow::setResult(BTSPResult result, bool drawEdges){
@@ -126,3 +141,4 @@ void MainWindow::runAnimation(){
     bool currentValue = oglWidget2->isRunAnimation();
     oglWidget2->setRunAnimation(!currentValue);
 }
+

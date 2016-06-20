@@ -33,6 +33,7 @@ private:
     QWidget *centralWidget;
     QMenu *fileMenu;    
     QAction *openFile;
+    QAction *openBruteFile;
 
     QMenu *experimentsMenu;
     QAction *runBrutForceAction;
@@ -59,6 +60,7 @@ private:
 
 private slots:
     void openFileDialog();
+    void openFileBruteForceDialog();
 
     void setResult(BTSPResult result, bool drawEdges = true);
 

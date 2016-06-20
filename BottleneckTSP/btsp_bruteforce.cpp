@@ -19,8 +19,9 @@ Graph* BTSPBruteforce::solve(int rootIndex){
     vector<vector<int>> sequences = getAllSequences(rootIndex, nodeCount);
     vector<int> btspSequence = getLeastBottleneckSequence(sequences);
     Graph* btspGraph = constructGraph(btspSequence);
+    btspGraph->root = btspGraph->nodeVector[rootIndex];
 
-    return btspGraph ;
+    return btspGraph;
 }
 
 std::vector<vector<int>> BTSPBruteforce::getAllSequences(int rootIndex,
@@ -79,8 +80,9 @@ vector<int> BTSPBruteforce::getLeastBottleneckSequence(vector<vector<int>>& sequ
     for(unsigned int i = 0; i < sequences.size(); i++){
         vector<int>& seq = sequences[i];
         float bottleneck = calculateBottleneck(seq);
+
         if(leastBottleneck > bottleneck){
-            leastBottleneckIndex = 1;
+            leastBottleneckIndex = i;
             leastBottleneck = bottleneck;
         }
     }

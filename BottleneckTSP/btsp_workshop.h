@@ -23,6 +23,7 @@ public:
 
     BTSPWorkshop();
 
+    BTSPResult runBruteForce(QString path);
     BTSPResult runBruteForce();
 
     BTSPResult runUSASmall();

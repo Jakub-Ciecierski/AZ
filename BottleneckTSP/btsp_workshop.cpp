@@ -110,10 +110,39 @@ BTSPResult BTSPWorkshop::runTest(QString path, int leap){
     return results;
 }
 
+BTSPResult BTSPWorkshop::runBruteForce(QString path){
+    BottleneckTSP btsp;
+    int leap = 1;
+
+    Graph* originalGraph = openGraphFile(path, leap);
+    if(originalGraph == NULL){
+        return BTSPResult{NULL, NULL};
+    }
+
+    Graph* btspAproxxGraph = btsp.BTSPApprox(originalGraph);
+
+    BTSPBruteforce btspBruteforce(originalGraph);
+    Graph* bruteforceGraph = btspBruteforce.solve(0);
+
+    BTSPResult results{btspAproxxGraph, bruteforceGraph};
+
+    float approxBottlneck = btspAproxxGraph->getBottleneck();
+    float bruteBottlneck = bruteforceGraph->getBottleneck();
+
+    float approxSumOfWeights = btspAproxxGraph->calculateSumOfWeights();
+    float bruteSumOfWeights = bruteforceGraph->calculateSumOfWeights();
+
+    btspAproxxGraph ->name = "BTSP Approx";
+    bruteforceGraph->name = "BTSP Bruteforce";
+
+    return results;
+}
+
 BTSPResult BTSPWorkshop::runBruteForce(){
     BottleneckTSP btsp;
-    QString path = "../resources/usa_base_DO_NOT_USE.tsp";
-    int leap = 11000; // usa, leap 11000 yeilds 10 vertices.
+    //QString path = "../resources/usa_base_DO_NOT_USE.tsp";
+    QString path = "../resources/bruteforce/usa_bf_10_b.tsp";
+    int leap = 1; // usa, leap 11000 yeilds 10 vertices.
 
     Graph* originalGraph = openGraphFile(path, leap);
     if(originalGraph == NULL){
